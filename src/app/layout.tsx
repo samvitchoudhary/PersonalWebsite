@@ -22,8 +22,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={`${crimsonPro.variable} h-full`}>
-      <body className="min-h-full antialiased">{children}</body>
+    <html lang="en" className={`${crimsonPro.variable} h-full overflow-hidden`}>
+      <body className="min-h-0 h-full overflow-hidden antialiased">{children}</body>
     </html>
   );
 }

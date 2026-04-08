@@ -1,10 +1,10 @@
 "use client";
 
-import { useState, useCallback } from "react";
+import { useState, useCallback, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { hotspots } from "@/data/hotspots";
 import type { HotspotId, ModalTheme } from "@/types";
-import { Hotspot } from "./Hotspot";
+import { KitchenHotspotOverlay } from "./KitchenHotspotOverlay";
 import { Modal } from "./Modal";
 import { Projects } from "./sections/Projects";
 import { Skills } from "./sections/Skills";
@@ -14,6 +14,7 @@ import { Resume } from "./sections/Resume";
 import { Interests } from "./sections/Interests";
 import { Contact } from "./sections/Contact";
 import { EasterEgg } from "./sections/EasterEgg";
+import { FridgeComingSoon } from "./sections/FridgeComingSoon";
 import type { ComponentType } from "react";
 
 type SectionComponent = ComponentType<{ theme: ModalTheme }>;
@@ -49,9 +50,20 @@ const modalRegistry: Record<
     },
     Section: Skills,
   },
+  fridge: {
+    subtitle: "Coming Soon",
+    title: "The Fridge",
+    theme: {
+      bg: "#1A2030",
+      accent: "#5B8CB8",
+      text: "#D4E8F0",
+      card: "#243040",
+    },
+    Section: FridgeComingSoon,
+  },
   about: {
-    subtitle: "Fridge",
-    title: "About Me",
+    subtitle: "About Me",
+    title: "Samvit",
     theme: {
       bg: "#1A2030",
       accent: "#5B8CB8",
@@ -121,6 +133,25 @@ export function KitchenScene() {
   const [modalOpen, setModalOpen] = useState(false);
   const [activeId, setActiveId] = useState<HotspotId | null>(null);
   const [showHint, setShowHint] = useState(true);
+  const [hotspotDebug, setHotspotDebug] = useState(false);
+
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => {
+      const t = e.target;
+      if (
+        t instanceof HTMLInputElement ||
+        t instanceof HTMLTextAreaElement ||
+        (t instanceof HTMLElement && t.isContentEditable)
+      ) {
+        return;
+      }
+      if (e.key === "d" || e.key === "D") {
+        setHotspotDebug((v) => !v);
+      }
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, []);
 
   const openHotspot = useCallback((id: HotspotId) => {
     setActiveId(id);
@@ -140,68 +171,66 @@ export function KitchenScene() {
   const Section = cfg?.Section;
 
   return (
-    <div className="flex w-full flex-col items-center">
-      <motion.div
-        className="relative w-[95vw] max-w-[1200px] overflow-hidden rounded-2xl shadow-[0_20px_80px_rgba(0,0,0,0.6),0_0_0_1px_rgba(212,160,60,0.1)]"
-        initial={{ y: 24 }}
-        animate={{ y: 0 }}
-        transition={{
-          delay: 0.5,
-          duration: 0.55,
-          ease: [0.16, 1, 0.3, 1],
+    <div
+      className="relative overflow-hidden"
+      style={{
+        position: "relative",
+        width: "100vw",
+        height: "100vh",
+        margin: 0,
+        padding: 0,
+      }}
+    >
+      {/* eslint-disable-next-line @next/next/no-img-element */}
+      <img
+        src="/PersonalWebsite.png"
+        alt=""
+        style={{
+          position: "absolute",
+          top: 0,
+          left: 0,
+          width: "100%",
+          height: "100%",
+          objectFit: "cover",
+          display: "block",
+          zIndex: 0,
         }}
-      >
-        <div
-          className="relative w-full overflow-hidden"
-          style={{ aspectRatio: "3 / 2" }}
-        >
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img
-            src="/PersonalWebsite.png"
-            alt="Kitchen"
-            style={{
-              width: "100%",
-              height: "100%",
-              objectFit: "cover",
-              display: "block",
-              position: "absolute",
-              top: 0,
-              left: 0,
-              zIndex: 0,
-            }}
-          />
-          <div className="absolute inset-0 z-10 cursor-default">
-            {hotspots.map((h) => (
-              <Hotspot key={h.id} {...h} onActivate={() => openHotspot(h.id)} />
-            ))}
-          </div>
+      />
+      <KitchenHotspotOverlay
+        hotspots={hotspots}
+        debug={hotspotDebug}
+        onOpen={openHotspot}
+      />
+
+      {hotspotDebug && (
+        <div className="pointer-events-none fixed left-3 top-3 z-[70] rounded-md border border-red-500/60 bg-black/70 px-2 py-1 font-mono text-[11px] text-red-300">
+          Hotspot debug — press D to hide · click polygons logs coords
         </div>
-      </motion.div>
+      )}
 
       <AnimatePresence>
         {showHint && (
-          <motion.p
+          <motion.div
             key="kitchen-hint"
-            initial={{ opacity: 0, y: 6 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: 4, transition: { duration: 0.35 } }}
-            transition={{ delay: 0.65, duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
-            className="mt-5 max-w-md text-center text-sm text-[#B8A888] max-[479px]:hidden"
-            style={{ fontFamily: "var(--font-crimson-pro), serif" }}
+            className="pointer-events-none absolute bottom-6 left-1/2 z-20 max-w-[min(90vw,420px)] -translate-x-1/2 px-3 sm:bottom-10"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0, transition: { duration: 0.35 } }}
+            transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
           >
-            <motion.span
+            <motion.div
               animate={{ opacity: [0.7, 1, 0.7] }}
               transition={{
                 duration: 3,
                 repeat: Infinity,
                 ease: "easeInOut",
-                delay: 1.05,
               }}
-              className="inline-block"
+              className="rounded-full border border-[rgba(212,160,60,0.3)] bg-[rgba(20,15,10,0.85)] px-3 py-1.5 text-center text-[13px] italic leading-snug text-[#F5E6C8] backdrop-blur-md"
+              style={{ fontFamily: "var(--font-crimson-pro), serif" }}
             >
               hover over items in the kitchen to explore ✨
-            </motion.span>
-          </motion.p>
+            </motion.div>
+          </motion.div>
         )}
       </AnimatePresence>
 

@@ -1,13 +1,17 @@
 @import "tailwindcss";
 
 html {
-  scroll-behavior: smooth;
+  height: 100%;
+  overflow: hidden;
 }
 
 body {
   margin: 0;
   padding: 0;
-  background: #0a0806;
+  min-height: 100%;
+  height: 100%;
+  overflow: hidden;
+  background: transparent;
   color: #f5e6c8;
   font-family: var(--font-crimson-pro), "Crimson Pro", Georgia, serif;
 }
@@ -35,16 +39,42 @@ body {
   scrollbar-color: rgba(212, 160, 60, 0.3) transparent;
 }
 
-.kitchen-hotspot {
-  transition:
-    background-color 0.4s cubic-bezier(0.4, 0, 0.2, 1),
-    box-shadow 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+/* SVG kitchen hotspots — default fill/stroke live on elements (fill="transparent").
+   Only :hover and debug use CSS fill/stroke so nothing forces a solid black fill. */
+.kitchen-hotspot-svg {
+  pointer-events: none;
 }
 
-.kitchen-hotspot:hover,
-.kitchen-hotspot:focus-visible {
-  background-color: var(--hotspot-glow);
-  box-shadow:
-    0 0 40px 10px var(--hotspot-glow),
-    inset 0 0 30px 5px var(--hotspot-glow);
+.kitchen-hotspot-svg .kitchen-hotspot-shape {
+  cursor: pointer;
+  pointer-events: all;
+  transition:
+    fill 0.3s ease,
+    stroke 0.3s ease,
+    stroke-width 0.3s ease;
+  vector-effect: non-scaling-stroke;
+}
+
+.kitchen-hotspot-svg:not(.kitchen-debug) .kitchen-hotspot-shape:hover {
+  fill: rgba(255, 215, 140, 0.12);
+  stroke: rgba(255, 220, 150, 0.5);
+  stroke-width: 2px;
+}
+
+.kitchen-hotspot-svg.kitchen-debug .kitchen-hotspot-shape {
+  fill: rgba(255, 34, 34, 0.06);
+  stroke: #ff3333;
+  stroke-width: 1.5px;
+}
+
+.kitchen-hotspot-svg.kitchen-debug .kitchen-hotspot-shape:hover {
+  fill: rgba(255, 34, 34, 0.1);
+  stroke: #ff4444;
+  stroke-width: 2px;
+}
+
+.kitchen-hotspot-debug-label {
+  pointer-events: none;
+  user-select: none;
+  font-family: ui-monospace, monospace;
 }

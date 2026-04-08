@@ -1,6 +1,7 @@
 export type HotspotId =
   | "projects"
   | "skills"
+  | "fridge"
   | "about"
   | "cooking"
   | "resume"
@@ -8,15 +9,21 @@ export type HotspotId =
   | "contact"
   | "easter";
 
+export type HotspotShape =
+  | { kind: "polygon"; points: string }
+  | {
+      kind: "rect";
+      x: number;
+      y: number;
+      width: number;
+      height: number;
+    };
+
 export interface HotspotConfig {
   id: HotspotId;
-  label: string;
-  description: string;
-  x: number;
-  y: number;
-  w: number;
-  h: number;
-  glowColor: string;
+  /** Full tooltip line (dark pill). */
+  tooltip: string;
+  shape: HotspotShape;
 }
 
 export interface Project {
