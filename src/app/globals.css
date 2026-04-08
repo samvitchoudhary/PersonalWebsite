@@ -1,0 +1,50 @@
+@import "tailwindcss";
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  background: #0a0806;
+  color: #f5e6c8;
+  font-family: var(--font-crimson-pro), "Crimson Pro", Georgia, serif;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+*::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+*::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+*::-webkit-scrollbar-thumb {
+  background: rgba(212, 160, 60, 0.3);
+  border-radius: 3px;
+}
+
+* {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(212, 160, 60, 0.3) transparent;
+}
+
+.kitchen-hotspot {
+  transition:
+    background-color 0.4s cubic-bezier(0.4, 0, 0.2, 1),
+    box-shadow 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.kitchen-hotspot:hover,
+.kitchen-hotspot:focus-visible {
+  background-color: var(--hotspot-glow);
+  box-shadow:
+    0 0 40px 10px var(--hotspot-glow),
+    inset 0 0 30px 5px var(--hotspot-glow);
+}
