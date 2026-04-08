@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useCallback, useEffect } from "react";
+import { useRouter } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import { hotspots } from "@/data/hotspots";
 import type { HotspotId, ModalTheme } from "@/types";
@@ -8,7 +9,6 @@ import { KitchenHotspotOverlay } from "./KitchenHotspotOverlay";
 import { Modal } from "./Modal";
 import { Projects } from "./sections/Projects";
 import { Skills } from "./sections/Skills";
-import { About } from "./sections/About";
 import { Cooking } from "./sections/Cooking";
 import { Resume } from "./sections/Resume";
 import { Interests } from "./sections/Interests";
@@ -19,8 +19,10 @@ import type { ComponentType } from "react";
 
 type SectionComponent = ComponentType<{ theme: ModalTheme }>;
 
+type ModalHotspotId = Exclude<HotspotId, "about">;
+
 const modalRegistry: Record<
-  HotspotId,
+  ModalHotspotId,
   {
     subtitle: string;
     title: string;
@@ -60,17 +62,6 @@ const modalRegistry: Record<
       card: "#243040",
     },
     Section: FridgeComingSoon,
-  },
-  about: {
-    subtitle: "About Me",
-    title: "Samvit",
-    theme: {
-      bg: "#1A2030",
-      accent: "#5B8CB8",
-      text: "#D4E8F0",
-      card: "#243040",
-    },
-    Section: About,
   },
   cooking: {
     subtitle: "Stove & Pot",
@@ -130,8 +121,9 @@ const modalRegistry: Record<
 };
 
 export function KitchenScene() {
+  const router = useRouter();
   const [modalOpen, setModalOpen] = useState(false);
-  const [activeId, setActiveId] = useState<HotspotId | null>(null);
+  const [activeId, setActiveId] = useState<ModalHotspotId | null>(null);
   const [showHint, setShowHint] = useState(true);
   const [hotspotDebug, setHotspotDebug] = useState(false);
 
@@ -153,11 +145,19 @@ export function KitchenScene() {
     return () => window.removeEventListener("keydown", onKey);
   }, []);
 
-  const openHotspot = useCallback((id: HotspotId) => {
-    setActiveId(id);
-    setModalOpen(true);
-    setShowHint(false);
-  }, []);
+  const openHotspot = useCallback(
+    (id: HotspotId) => {
+      if (id === "about") {
+        router.push("/about");
+        setShowHint(false);
+        return;
+      }
+      setActiveId(id);
+      setModalOpen(true);
+      setShowHint(false);
+    },
+    [router],
+  );
 
   const closeModal = useCallback(() => {
     setModalOpen(false);
