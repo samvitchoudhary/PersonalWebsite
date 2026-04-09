@@ -2,31 +2,8 @@
 
 import { useState, useCallback, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import type { HotspotConfig, HotspotId, HotspotShape } from "@/types";
-
-function shapeCenter(shape: HotspotShape): { x: number; y: number } {
-  if (shape.kind === "rect") {
-    return {
-      x: shape.x + shape.width / 2,
-      y: shape.y + shape.height / 2,
-    };
-  }
-  const pairs = shape.points.trim().split(/\s+/).filter(Boolean);
-  const xs: number[] = [];
-  const ys: number[] = [];
-  for (const p of pairs) {
-    const parts = p.split(",").map(Number);
-    if (parts.length >= 2 && !Number.isNaN(parts[0]) && !Number.isNaN(parts[1])) {
-      xs.push(parts[0]);
-      ys.push(parts[1]);
-    }
-  }
-  if (xs.length === 0) return { x: 768, y: 512 };
-  return {
-    x: (Math.min(...xs) + Math.max(...xs)) / 2,
-    y: (Math.min(...ys) + Math.max(...ys)) / 2,
-  };
-}
+import type { HotspotConfig, HotspotId } from "@/types";
+import { shapeCenter } from "@/lib/hotspotGeometry";
 
 function svgPointToScreen(
   svg: SVGSVGElement,

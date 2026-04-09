@@ -9,6 +9,7 @@ import {
   useSpring,
 } from "framer-motion";
 import { PhotoPlaceholder } from "./PhotoPlaceholder";
+import { KitchenBridgeRevealOverlay } from "@/components/kitchen/KitchenBridgeRevealOverlay";
 
 const BG = "#0A0806";
 const CREAM = "#F5E6C8";
@@ -72,11 +73,13 @@ export function AboutScrollPage() {
   const heroTextYSmooth = useSpring(heroTextY, { stiffness: 100, damping: 30 });
 
   return (
-    <main
-      className="min-h-screen overflow-x-hidden"
-      style={{ backgroundColor: BG, color: CREAM }}
-    >
-      <BackButton />
+    <>
+      <KitchenBridgeRevealOverlay />
+      <main
+        className="min-h-screen overflow-x-hidden"
+        style={{ backgroundColor: BG, color: CREAM }}
+      >
+        <BackButton />
 
       {/* Section 1 — Hero */}
       <section className="relative flex min-h-screen flex-col items-center justify-center px-6 pt-24">
@@ -525,6 +528,7 @@ export function AboutScrollPage() {
         </Link>
       </motion.section>
     </main>
+    </>
   );
 }
 

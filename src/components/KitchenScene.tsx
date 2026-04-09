@@ -1,25 +1,26 @@
 "use client";
 
 import { useState, useCallback, useEffect } from "react";
-import { useRouter } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import { hotspots } from "@/data/hotspots";
 import type { HotspotId, ModalTheme } from "@/types";
+import { transformOriginPercentFromShape } from "@/lib/hotspotGeometry";
+import { KITCHEN_PAGE_ROUTES } from "@/lib/kitchenPageRoutes";
+import { useKitchenPageExitZoom } from "@/hooks/useKitchenPageExitZoom";
+import { KitchenExitZoomLayer } from "@/components/kitchen/KitchenExitZoomLayer";
 import { KitchenHotspotOverlay } from "./KitchenHotspotOverlay";
 import { Modal } from "./Modal";
 import { Projects } from "./sections/Projects";
-import { Skills } from "./sections/Skills";
 import { Cooking } from "./sections/Cooking";
 import { Resume } from "./sections/Resume";
 import { Interests } from "./sections/Interests";
-import { Contact } from "./sections/Contact";
 import { EasterEgg } from "./sections/EasterEgg";
 import { FridgeComingSoon } from "./sections/FridgeComingSoon";
 import type { ComponentType } from "react";
 
 type SectionComponent = ComponentType<{ theme: ModalTheme }>;
 
-type ModalHotspotId = Exclude<HotspotId, "about">;
+type ModalHotspotId = Exclude<HotspotId, "about" | "skills" | "contact">;
 
 const modalRegistry: Record<
   ModalHotspotId,
@@ -40,17 +41,6 @@ const modalRegistry: Record<
       card: "#3D261A",
     },
     Section: Projects,
-  },
-  skills: {
-    subtitle: "Spice Rack",
-    title: "Skills",
-    theme: {
-      bg: "#1A2A1A",
-      accent: "#7CB87A",
-      text: "#E8F0E4",
-      card: "#243424",
-    },
-    Section: Skills,
   },
   fridge: {
     subtitle: "Coming Soon",
@@ -96,17 +86,6 @@ const modalRegistry: Record<
     },
     Section: Interests,
   },
-  contact: {
-    subtitle: "Window",
-    title: "Contact",
-    theme: {
-      bg: "#1A2A3A",
-      accent: "#8BBAD4",
-      text: "#D4E8F0",
-      card: "#243444",
-    },
-    Section: Contact,
-  },
   easter: {
     subtitle: "Kitchen Timer",
     title: "???",
@@ -121,7 +100,13 @@ const modalRegistry: Record<
 };
 
 export function KitchenScene() {
-  const router = useRouter();
+  const {
+    isExiting,
+    transformOrigin,
+    navigateWithZoom,
+    durationMs,
+  } = useKitchenPageExitZoom(600);
+
   const [modalOpen, setModalOpen] = useState(false);
   const [activeId, setActiveId] = useState<ModalHotspotId | null>(null);
   const [showHint, setShowHint] = useState(true);
@@ -147,16 +132,22 @@ export function KitchenScene() {
 
   const openHotspot = useCallback(
     (id: HotspotId) => {
-      if (id === "about") {
-        router.push("/about");
+      const path = KITCHEN_PAGE_ROUTES[id];
+      if (path) {
+        const def = hotspots.find((h) => h.id === id);
+        if (def) {
+          const origin =
+            def.transformOrigin ?? transformOriginPercentFromShape(def.shape);
+          navigateWithZoom(path, origin);
+        }
         setShowHint(false);
         return;
       }
-      setActiveId(id);
+      setActiveId(id as ModalHotspotId);
       setModalOpen(true);
       setShowHint(false);
     },
-    [router],
+    [navigateWithZoom],
   );
 
   const closeModal = useCallback(() => {
@@ -170,6 +161,8 @@ export function KitchenScene() {
   const cfg = activeId ? modalRegistry[activeId] : null;
   const Section = cfg?.Section;
 
+  const durationSec = durationMs / 1000;
+
   return (
     <div
       className="relative overflow-hidden"
@@ -179,28 +172,35 @@ export function KitchenScene() {
         height: "100vh",
         margin: 0,
         padding: 0,
+        pointerEvents: isExiting ? "none" : "auto",
       }}
     >
-      {/* eslint-disable-next-line @next/next/no-img-element */}
-      <img
-        src="/PersonalWebsite.png"
-        alt=""
-        style={{
-          position: "absolute",
-          top: 0,
-          left: 0,
-          width: "100%",
-          height: "100%",
-          objectFit: "cover",
-          display: "block",
-          zIndex: 0,
-        }}
-      />
-      <KitchenHotspotOverlay
-        hotspots={hotspots}
-        debug={hotspotDebug}
-        onOpen={openHotspot}
-      />
+      <KitchenExitZoomLayer
+        isExiting={isExiting}
+        transformOrigin={transformOrigin}
+        durationSec={durationSec}
+      >
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img
+          src="/PersonalWebsite.png"
+          alt=""
+          style={{
+            position: "absolute",
+            top: 0,
+            left: 0,
+            width: "100%",
+            height: "100%",
+            objectFit: "cover",
+            display: "block",
+            zIndex: 0,
+          }}
+        />
+        <KitchenHotspotOverlay
+          hotspots={hotspots}
+          debug={hotspotDebug}
+          onOpen={openHotspot}
+        />
+      </KitchenExitZoomLayer>
 
       {hotspotDebug && (
         <div className="pointer-events-none fixed left-3 top-3 z-[70] rounded-md border border-red-500/60 bg-black/70 px-2 py-1 font-mono text-[11px] text-red-300">

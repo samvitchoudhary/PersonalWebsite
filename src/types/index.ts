@@ -24,6 +24,8 @@ export interface HotspotConfig {
   /** Full tooltip line (dark pill). */
   tooltip: string;
   shape: HotspotShape;
+  /** Optional CSS transform-origin for kitchen exit zoom (overrides bbox center). */
+  transformOrigin?: string;
 }
 
 export interface Project {

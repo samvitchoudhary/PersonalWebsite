@@ -79,3 +79,23 @@ body {
   user-select: none;
   font-family: ui-monospace, monospace;
 }
+
+/* Contact page SVG polygon hotspots */
+.contact-hotspot-svg {
+  pointer-events: none;
+}
+
+.contact-hotspot-svg .contact-hotspot-shape {
+  cursor: pointer;
+  pointer-events: all;
+  transition: all 0.3s ease;
+  vector-effect: non-scaling-stroke;
+}
+
+.contact-hotspot-svg .contact-hotspot-shape:hover {
+  fill: rgba(255, 215, 140, 0.15);
+}
+
+.contact-hotspot-svg a {
+  pointer-events: all;
+}
