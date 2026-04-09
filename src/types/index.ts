@@ -5,9 +5,7 @@ export type HotspotId =
   | "about"
   | "cooking"
   | "resume"
-  | "interests"
-  | "contact"
-  | "easter";
+  | "contact";
 
 export type HotspotShape =
   | { kind: "polygon"; points: string }
@@ -56,12 +54,6 @@ export interface Experience {
   role: string;
   org: string;
   period: string;
-  description: string;
-}
-
-export interface InterestStation {
-  frequency: string;
-  title: string;
   description: string;
 }
 

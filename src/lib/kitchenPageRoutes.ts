@@ -5,4 +5,5 @@ export const KITCHEN_PAGE_ROUTES: Partial<Record<HotspotId, string>> = {
   about: "/about",
   skills: "/skills",
   contact: "/contact",
+  resume: "/resume",
 };

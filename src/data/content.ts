@@ -3,7 +3,6 @@ import type {
   ContactLink,
   CookingItem,
   Experience,
-  InterestStation,
   Project,
   SkillCategory,
 } from "@/types";
@@ -171,33 +170,6 @@ export const experiences: Experience[] = [
   },
 ];
 
-export const interestStations: InterestStation[] = [
-  {
-    frequency: "98.1 FM",
-    title: "COYS Radio",
-    description:
-      "Watches Tottenham Hotspur every weekend. Would travel to London to see them play.",
-  },
-  {
-    frequency: "101.3 FM",
-    title: "Kitchen Confidential",
-    description:
-      "Passionate about cooking — a skill learned from mom. Cooks at least one meal every day.",
-  },
-  {
-    frequency: "104.7 FM",
-    title: "The Journal Hour",
-    description:
-      "Regular journaling practice — one of the most meaningful personal habits.",
-  },
-  {
-    frequency: "107.9 FM",
-    title: "Trailblazer FM",
-    description:
-      "Eagle Scout who built community garden plots. Led as Senior Patrol Leader.",
-  },
-];
-
 export const contactLinks: ContactLink[] = [
   {
     emoji: "✉️",
@@ -217,12 +189,4 @@ export const contactLinks: ContactLink[] = [
     value: "linkedin.com/in/samvit",
     href: "https://linkedin.com/in/samvit",
   },
-];
-
-export const easterFacts: string[] = [
-  "Samvit won first place at a TCNJ hackathon building an IoT weather sensor with real-time data visualization.",
-  "His Eagle Scout project involved building community garden plots for the community.",
-  "He led his high school tennis team to two sectional titles as captain.",
-  "He spends a full month every August visiting family in India.",
-  "This entire website is an interactive kitchen illustration. You found the secret timer!",
 ];

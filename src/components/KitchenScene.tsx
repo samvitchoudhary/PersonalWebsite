@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useCallback, useEffect } from "react";
+import { useRouter } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import { hotspots } from "@/data/hotspots";
 import type { HotspotId, ModalTheme } from "@/types";
@@ -12,15 +13,15 @@ import { KitchenHotspotOverlay } from "./KitchenHotspotOverlay";
 import { Modal } from "./Modal";
 import { Projects } from "./sections/Projects";
 import { Cooking } from "./sections/Cooking";
-import { Resume } from "./sections/Resume";
-import { Interests } from "./sections/Interests";
-import { EasterEgg } from "./sections/EasterEgg";
 import { FridgeComingSoon } from "./sections/FridgeComingSoon";
 import type { ComponentType } from "react";
 
 type SectionComponent = ComponentType<{ theme: ModalTheme }>;
 
-type ModalHotspotId = Exclude<HotspotId, "about" | "skills" | "contact">;
+type ModalHotspotId = Exclude<
+  HotspotId,
+  "about" | "skills" | "contact" | "resume"
+>;
 
 const modalRegistry: Record<
   ModalHotspotId,
@@ -64,42 +65,10 @@ const modalRegistry: Record<
     },
     Section: Cooking,
   },
-  resume: {
-    subtitle: "Chalkboard",
-    title: "Resume",
-    theme: {
-      bg: "#1A2420",
-      accent: "#D4CEBC",
-      text: "#E8E4D8",
-      card: "#2D4A3E",
-    },
-    Section: Resume,
-  },
-  interests: {
-    subtitle: "Radio",
-    title: "Interests",
-    theme: {
-      bg: "#2A2018",
-      accent: "#D4A03C",
-      text: "#F0E8D8",
-      card: "#3D3020",
-    },
-    Section: Interests,
-  },
-  easter: {
-    subtitle: "Kitchen Timer",
-    title: "???",
-    theme: {
-      bg: "#2A2420",
-      accent: "#D4C19A",
-      text: "#F0E8D8",
-      card: "#3D3428",
-    },
-    Section: EasterEgg,
-  },
 };
 
 export function KitchenScene() {
+  const router = useRouter();
   const {
     isExiting,
     transformOrigin,
@@ -134,6 +103,11 @@ export function KitchenScene() {
     (id: HotspotId) => {
       const path = KITCHEN_PAGE_ROUTES[id];
       if (path) {
+        if (id === "resume") {
+          router.push(path);
+          setShowHint(false);
+          return;
+        }
         const def = hotspots.find((h) => h.id === id);
         if (def) {
           const origin =
@@ -147,7 +121,7 @@ export function KitchenScene() {
       setModalOpen(true);
       setShowHint(false);
     },
-    [navigateWithZoom],
+    [navigateWithZoom, router],
   );
 
   const closeModal = useCallback(() => {

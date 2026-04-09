@@ -41,6 +41,7 @@ export const hotspots: HotspotConfig[] = [
   {
     id: "resume",
     tooltip: "Chalkboard — Resume",
+    transformOrigin: "90% 30%",
     shape: {
       kind: "polygon",
       points:
@@ -65,15 +66,5 @@ export const hotspots: HotspotConfig[] = [
       points:
         "666,535 666,523 666,512 666,504 673,501 674,492 683,491 690,489 702,491 708,499 717,499 772,499 782,501 784,508 788,524 791,542 793,558 785,564 773,564 755,564 742,564 724,565 705,565 693,565 678,565 679,572 685,585 689,599 685,609 678,615 667,618 654,609 654,599 658,587 660,575 662,565 664,546 663,554",
     },
-  },
-  {
-    id: "interests",
-    tooltip: "Radio — Interests",
-    shape: { kind: "rect", x: 492, y: 154, width: 215, height: 143 },
-  },
-  {
-    id: "easter",
-    tooltip: "Kitchen Timer — ???",
-    shape: { kind: "rect", x: 338, y: 665, width: 123, height: 123 },
   },
 ];
