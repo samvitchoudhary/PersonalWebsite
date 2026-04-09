@@ -98,3 +98,9 @@ body {
 .contact-hotspot-svg a {
   pointer-events: all;
 }
+
+/* About page: paginated slides — block touch/trackpad scroll; navigation is via controls only */
+.about-snap-container {
+  touch-action: none;
+  overscroll-behavior-y: none;
+}
