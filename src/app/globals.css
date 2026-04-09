@@ -40,8 +40,7 @@ body {
   scrollbar-color: rgba(212, 160, 60, 0.3) transparent;
 }
 
-/* SVG kitchen hotspots — default fill/stroke live on elements (fill="transparent").
-   Only :hover and debug use CSS fill/stroke so nothing forces a solid black fill. */
+/* Kitchen hotspots: default transparent; hover = soft warm lighten (no stroke). */
 .kitchen-hotspot-svg {
   pointer-events: none;
 }
@@ -49,29 +48,28 @@ body {
 .kitchen-hotspot-svg .kitchen-hotspot-shape {
   cursor: pointer;
   pointer-events: all;
-  transition:
-    fill 0.3s ease,
-    stroke 0.3s ease,
-    stroke-width 0.3s ease;
-  vector-effect: non-scaling-stroke;
+  fill: transparent;
+  stroke: none;
+  stroke-width: 0;
+  transition: all 0.3s ease;
 }
 
 .kitchen-hotspot-svg:not(.kitchen-debug) .kitchen-hotspot-shape:hover {
-  fill: rgba(255, 215, 140, 0.12);
-  stroke: rgba(255, 220, 150, 0.5);
-  stroke-width: 2px;
+  fill: rgba(255, 255, 220, 0.15);
+  stroke: none;
+  stroke-width: 0;
 }
 
 .kitchen-hotspot-svg.kitchen-debug .kitchen-hotspot-shape {
-  fill: rgba(255, 34, 34, 0.06);
-  stroke: #ff3333;
-  stroke-width: 1.5px;
+  fill: rgba(255, 34, 34, 0.14);
+  stroke: none;
+  stroke-width: 0;
 }
 
 .kitchen-hotspot-svg.kitchen-debug .kitchen-hotspot-shape:hover {
-  fill: rgba(255, 34, 34, 0.1);
-  stroke: #ff4444;
-  stroke-width: 2px;
+  fill: rgba(255, 34, 34, 0.24);
+  stroke: none;
+  stroke-width: 0;
 }
 
 .kitchen-hotspot-debug-label {
@@ -88,12 +86,13 @@ body {
 .contact-hotspot-svg .contact-hotspot-shape {
   cursor: pointer;
   pointer-events: all;
-  transition: all 0.3s ease;
-  vector-effect: non-scaling-stroke;
+  transition: fill 0.3s ease;
 }
 
 .contact-hotspot-svg .contact-hotspot-shape:hover {
-  fill: rgba(255, 215, 140, 0.15);
+  fill: rgba(255, 215, 140, 0.12);
+  stroke: none;
+  stroke-width: 0;
 }
 
 .contact-hotspot-svg a {
