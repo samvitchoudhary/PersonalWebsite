@@ -11,7 +11,6 @@ import { useKitchenPageExitZoom } from "@/hooks/useKitchenPageExitZoom";
 import { KitchenExitZoomLayer } from "@/components/kitchen/KitchenExitZoomLayer";
 import { KitchenHotspotOverlay } from "./KitchenHotspotOverlay";
 import { Modal } from "./Modal";
-import { Projects } from "./sections/Projects";
 import { Cooking } from "./sections/Cooking";
 import { FridgeComingSoon } from "./sections/FridgeComingSoon";
 import type { ComponentType } from "react";
@@ -20,7 +19,7 @@ type SectionComponent = ComponentType<{ theme: ModalTheme }>;
 
 type ModalHotspotId = Exclude<
   HotspotId,
-  "about" | "skills" | "contact" | "resume"
+  "about" | "skills" | "contact" | "resume" | "projects"
 >;
 
 const modalRegistry: Record<
@@ -32,20 +31,9 @@ const modalRegistry: Record<
     Section: SectionComponent;
   }
 > = {
-  projects: {
-    subtitle: "Recipe Book",
-    title: "Projects",
-    theme: {
-      bg: "#2C1810",
-      accent: "#D4A03C",
-      text: "#F5E6C8",
-      card: "#3D261A",
-    },
-    Section: Projects,
-  },
   fridge: {
     subtitle: "Coming Soon",
-    title: "The Fridge",
+    title: "Fridge",
     theme: {
       bg: "#1A2030",
       accent: "#5B8CB8",
@@ -103,7 +91,7 @@ export function KitchenScene() {
     (id: HotspotId) => {
       const path = KITCHEN_PAGE_ROUTES[id];
       if (path) {
-        if (id === "resume") {
+        if (id === "resume" || id === "projects") {
           router.push(path);
           setShowHint(false);
           return;

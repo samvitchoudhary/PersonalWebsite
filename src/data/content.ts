@@ -141,10 +141,10 @@ export const cookingItems: CookingItem[] = [
       "An interactive illustrated kitchen — the site you're exploring right now.",
   },
   {
-    title: "CMSC 132",
+    title: "AWS Cloud Practitioner Certification",
     status: "Studying",
     description:
-      "Recursive auxiliary methods, Java Collections Framework maps and sets.",
+      "Working toward the AWS Certified Cloud Practitioner certification.",
   },
 ];
 

@@ -32,3 +32,24 @@ export function PhotoPlaceholder({
     </div>
   );
 }
+
+/** Real photo with the same layout shell as PhotoPlaceholder */
+export function AboutPhoto({
+  src,
+  alt,
+  className = "",
+  noRound = false,
+}: {
+  src: string;
+  alt: string;
+  className?: string;
+  noRound?: boolean;
+}) {
+  return (
+    <div
+      className={`min-h-[120px] overflow-hidden ${noRound ? "rounded-none" : "rounded-2xl"} ${className}`}
+    >
+      <img src={src} alt={alt} className="h-full w-full object-cover" />
+    </div>
+  );
+}
