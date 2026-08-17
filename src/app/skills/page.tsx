@@ -6,7 +6,8 @@ const SkillsClient = dynamic(() => import("./SkillsClient"), {
   ssr: false,
   loading: () => (
     <div
-      className="h-[100dvh] w-screen bg-[#F5E6C8]"
+      className="h-[100dvh] w-screen"
+      style={{ backgroundColor: "#C4A46A" }}
       aria-hidden
     />
   ),

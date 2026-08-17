@@ -1,7 +1,7 @@
 import Link from "next/link";
 
 const CREAM = "#F5E6C8";
-const PDF_PATH = "/Samvit_Choudhary_SoftwareEngineer.pdf";
+const PDF_PATH = "/SamvitChoudhary_Resume.pdf";
 
 export default function ResumePage() {
   return (
@@ -41,7 +41,7 @@ export default function ResumePage() {
         />
         <a
           href={PDF_PATH}
-          download="Samvit_Choudhary_SoftwareEngineer.pdf"
+          download="SamvitChoudhary_Resume.pdf"
           className="mt-4 text-center text-base text-[#D4A03C] no-underline underline-offset-[6px] transition-[opacity,text-decoration] hover:underline hover:opacity-95 hover:decoration-[#D4A03C]"
           style={{ fontFamily: "var(--font-crimson-pro), serif" }}
         >

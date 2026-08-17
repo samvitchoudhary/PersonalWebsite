@@ -29,8 +29,8 @@ export function Resume({ theme }: { theme: ModalTheme }) {
         </article>
       ))}
       <a
-        href="/resume.pdf"
-        download
+        href="/SamvitChoudhary_Resume.pdf"
+        download="SamvitChoudhary_Resume.pdf"
         className="mx-auto mt-2 inline-flex cursor-pointer items-center justify-center rounded-full border-2 px-6 py-2.5 text-sm font-medium transition-opacity hover:opacity-90"
         style={{
           borderColor: theme.accent,

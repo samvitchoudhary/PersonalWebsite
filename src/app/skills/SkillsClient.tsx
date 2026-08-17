@@ -4,16 +4,21 @@ import Link from "next/link";
 import { KitchenBridgeRevealOverlay } from "@/components/kitchen/KitchenBridgeRevealOverlay";
 
 const CREAM = "#F5E6C8";
+/** Warm parchment sampled from Skills.png edge tones */
+const PARCHMENT = "#C4A46A";
 
 export default function SkillsClient() {
   return (
-    <div className="relative h-[100dvh] w-screen overflow-hidden bg-[#0A0806]">
+    <div
+      className="relative flex h-[100dvh] max-h-[100dvh] w-screen items-center justify-center overflow-hidden"
+      style={{ backgroundColor: PARCHMENT }}
+    >
       <KitchenBridgeRevealOverlay />
       {/* eslint-disable-next-line @next/next/no-img-element */}
       <img
         src="/Skills.png"
-        alt=""
-        className="absolute left-0 top-0 z-0 block h-full w-full object-cover"
+        alt="Spice rack of skills — Languages, Frameworks, and Tools"
+        className="relative z-0 h-full w-full object-contain object-center"
       />
 
       <div className="fixed left-4 top-4 z-50 md:left-6 md:top-6">
