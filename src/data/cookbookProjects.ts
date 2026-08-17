@@ -95,7 +95,7 @@ export const cookbookProjects: CookbookProject[] = [
     ],
     featured: false,
     github: "https://github.com/samvitchoudhary/Moms_Website",
-    live: "https://moms-website-sage.vercel.app",
+    live: "https://swaticooks.com",
   },
 ];
 
