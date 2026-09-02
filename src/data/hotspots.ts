@@ -22,7 +22,7 @@ export const hotspots: HotspotConfig[] = [
   },
   {
     id: "fridge",
-    tooltip: "Fridge — Coming Soon",
+    tooltip: "Fridge — Mini Game",
     shape: {
       kind: "polygon",
       points:

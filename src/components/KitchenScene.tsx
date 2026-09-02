@@ -12,14 +12,13 @@ import { KitchenExitZoomLayer } from "@/components/kitchen/KitchenExitZoomLayer"
 import { KitchenHotspotOverlay } from "./KitchenHotspotOverlay";
 import { Modal } from "./Modal";
 import { Cooking } from "./sections/Cooking";
-import { FridgeComingSoon } from "./sections/FridgeComingSoon";
 import type { ComponentType } from "react";
 
 type SectionComponent = ComponentType<{ theme: ModalTheme }>;
 
 type ModalHotspotId = Exclude<
   HotspotId,
-  "about" | "skills" | "contact" | "resume" | "projects"
+  "about" | "skills" | "contact" | "resume" | "projects" | "fridge"
 >;
 
 const modalRegistry: Record<
@@ -31,17 +30,6 @@ const modalRegistry: Record<
     Section: SectionComponent;
   }
 > = {
-  fridge: {
-    subtitle: "Coming Soon",
-    title: "Fridge",
-    theme: {
-      bg: "#1A2030",
-      accent: "#5B8CB8",
-      text: "#D4E8F0",
-      card: "#243040",
-    },
-    Section: FridgeComingSoon,
-  },
   cooking: {
     subtitle: "Stove & Pot",
     title: "What's Cooking",

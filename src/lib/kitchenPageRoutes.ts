@@ -7,4 +7,5 @@ export const KITCHEN_PAGE_ROUTES: Partial<Record<HotspotId, string>> = {
   contact: "/contact",
   resume: "/resume",
   projects: "/projects",
+  fridge: "/fridge",
 };
