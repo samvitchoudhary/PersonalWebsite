@@ -1,25 +1,37 @@
 "use client";
 
+import Matter, { type Engine, type IEventCollision } from "matter-js";
 import { useCallback, useEffect, useLayoutEffect, useRef, useState } from "react";
 import {
-  BOWL_BOTTOM,
-  BOWL_COLOR,
-  BOWL_HEIGHT,
-  BOWL_SPEED,
-  BOWL_WIDTH,
-  createFallingIngredient,
-  getBowlRect,
+  applyArenaLayoutToBodies,
+  bodyToRenderState,
+  createFridgePhysics,
+  createIngredientBody,
+  destroyFridgePhysics,
+  getIngredientGameData,
+  isBodyPastBottom,
+  isIngredientBody,
+  removeBodyFromWorld,
+  setEngineGravity,
+  stepPhysics,
+  updateBowlBodyPosition,
+} from "./fridgePhysics";
+import {
+  BOWL_IMAGE_SRC,
+  FRIDGE_INGREDIENT_IMAGE_SRCS,
+  getArenaLayout,
   getDifficultySettings,
-  getIngredientRect,
   GOOD_CATCH_POINTS,
   INITIAL_LIVES,
   pickRandomIngredientTemplate,
-  rectsOverlap,
+  type ArenaLayout,
   type FallingIngredient,
 } from "./ingredients";
 
 const CREAM = "#F5E6C8";
 const GOLD = "#D4A03C";
+
+const DEFAULT_LAYOUT = getArenaLayout(800, 600);
 
 type KeyState = {
   left: boolean;
@@ -36,19 +48,21 @@ function isRightKey(key: string) {
 
 function IngredientSprite({ item }: { item: FallingIngredient }) {
   return (
-    <div
-      className={item.shape === "circle" ? "rounded-full" : "rounded-sm"}
+    <img
+      src={item.imageSrc}
+      alt=""
+      aria-hidden
+      draggable={false}
+      decoding="async"
+      width={item.size}
+      height={item.size}
+      className="pointer-events-none absolute select-none"
       style={{
-        position: "absolute",
         left: item.x,
         top: item.y,
-        width: item.size,
-        height: item.size,
-        backgroundColor: item.color,
-        boxShadow: "0 2px 6px rgba(0,0,0,0.25)",
+        transform: `rotate(${item.angle}rad)`,
+        transformOrigin: "center center",
       }}
-      aria-hidden
-      title={item.label}
     />
   );
 }
@@ -57,13 +71,16 @@ export function FridgeGameArena() {
   const containerRef = useRef<HTMLDivElement>(null);
   const keysRef = useRef<KeyState>({ left: false, right: false });
   const bowlXRef = useRef(0);
-  const itemsRef = useRef<FallingIngredient[]>([]);
   const nextInstanceIdRef = useRef(1);
   const lastSpawnRef = useRef(0);
   const gameStartTimestampRef = useRef(0);
   const gameOverRef = useRef(false);
+  const scoreDeltaRef = useRef(0);
+  const livesDeltaRef = useRef(0);
+  const layoutRef = useRef<ArenaLayout>(DEFAULT_LAYOUT);
 
   const [bowlX, setBowlX] = useState(0);
+  const [arenaLayout, setArenaLayout] = useState<ArenaLayout>(DEFAULT_LAYOUT);
   const [items, setItems] = useState<FallingIngredient[]>([]);
   const [score, setScore] = useState(0);
   const [lives, setLives] = useState(INITIAL_LIVES);
@@ -72,22 +89,31 @@ export function FridgeGameArena() {
 
   gameOverRef.current = gameOver;
 
-  const centerBowl = useCallback(() => {
+  const syncLayoutFromContainer = useCallback(() => {
     const el = containerRef.current;
-    if (!el) return;
-    const maxX = Math.max(0, el.clientWidth - BOWL_WIDTH);
+    if (!el) return DEFAULT_LAYOUT;
+    const layout = getArenaLayout(el.clientWidth, el.clientHeight);
+    layoutRef.current = layout;
+    setArenaLayout(layout);
+    return layout;
+  }, []);
+
+  const centerBowl = useCallback(() => {
+    const layout = syncLayoutFromContainer();
+    const maxX = Math.max(0, layout.containerWidth - layout.bowlWidth);
     const centered = maxX / 2;
     bowlXRef.current = centered;
     setBowlX(centered);
-  }, []);
+  }, [syncLayoutFromContainer]);
 
   const resetGame = useCallback(() => {
     keysRef.current = { left: false, right: false };
-    itemsRef.current = [];
     nextInstanceIdRef.current = 1;
     lastSpawnRef.current = 0;
     gameStartTimestampRef.current = 0;
     gameOverRef.current = false;
+    scoreDeltaRef.current = 0;
+    livesDeltaRef.current = 0;
     setItems([]);
     setScore(0);
     setLives(INITIAL_LIVES);
@@ -103,7 +129,10 @@ export function FridgeGameArena() {
     if (!el) return;
 
     const observer = new ResizeObserver(() => {
-      const maxX = Math.max(0, el.clientWidth - BOWL_WIDTH);
+      const layout = getArenaLayout(el.clientWidth, el.clientHeight);
+      layoutRef.current = layout;
+      setArenaLayout(layout);
+      const maxX = Math.max(0, layout.containerWidth - layout.bowlWidth);
       bowlXRef.current = Math.min(maxX, Math.max(0, bowlXRef.current));
       setBowlX(bowlXRef.current);
     });
@@ -146,34 +175,86 @@ export function FridgeGameArena() {
     };
   }, [gameKey]);
 
-  /** Main game loop: bowl movement, spawning, falling, collisions */
   useEffect(() => {
+    for (const src of FRIDGE_INGREDIENT_IMAGE_SRCS) {
+      const img = new window.Image();
+      img.src = src;
+    }
+  }, []);
+
+  useEffect(() => {
+    const el = containerRef.current;
+    if (!el) return;
+
+    const initialLayout = getArenaLayout(el.clientWidth, el.clientHeight);
+    layoutRef.current = initialLayout;
+    setArenaLayout(initialLayout);
+
+    const { engine, bowlBody } = createFridgePhysics(
+      initialLayout,
+      bowlXRef.current,
+    );
+
+    let previousLayout: ArenaLayout | null = null;
+    const handledCollisions = new Set<number>();
+
+    const onCollisionStart = (event: IEventCollision<Engine>) => {
+      if (gameOverRef.current) return;
+
+      for (const pair of event.pairs) {
+        const ingredientBody = isIngredientBody(pair.bodyA)
+          ? pair.bodyA
+          : isIngredientBody(pair.bodyB)
+            ? pair.bodyB
+            : null;
+        const bowlBodyHit =
+          pair.bodyA === bowlBody || pair.bodyB === bowlBody;
+
+        if (!ingredientBody || !bowlBodyHit) continue;
+
+        const game = getIngredientGameData(ingredientBody);
+        if (!game || handledCollisions.has(game.instanceId)) continue;
+
+        handledCollisions.add(game.instanceId);
+
+        if (game.kind === "good") {
+          scoreDeltaRef.current += GOOD_CATCH_POINTS;
+        } else {
+          livesDeltaRef.current += 1;
+        }
+
+        removeBodyFromWorld(engine, ingredientBody);
+      }
+    };
+
+    Matter.Events.on(engine, "collisionStart", onCollisionStart);
+
     let frameId = 0;
 
     const tick = (timestamp: number) => {
-      const el = containerRef.current;
-      if (!el) {
+      const container = containerRef.current;
+      if (!container) {
         frameId = requestAnimationFrame(tick);
         return;
       }
 
-      const containerWidth = el.clientWidth;
-      const containerHeight = el.clientHeight;
-      const maxBowlX = Math.max(0, containerWidth - BOWL_WIDTH);
+      const layout = getArenaLayout(
+        container.clientWidth,
+        container.clientHeight,
+      );
+      layoutRef.current = layout;
+
+      const maxBowlX = Math.max(0, layout.containerWidth - layout.bowlWidth);
       const isFrozen = gameOverRef.current;
 
       let bowlChanged = false;
-      let itemsChanged = false;
-      let scoreDelta = 0;
-      let livesDelta = 0;
 
-      // --- Bowl movement (skip when game over) ---
       if (!isFrozen) {
         const { left, right } = keysRef.current;
         if (left || right) {
           let next = bowlXRef.current;
-          if (left) next -= BOWL_SPEED;
-          if (right) next += BOWL_SPEED;
+          if (left) next -= layout.bowlSpeed;
+          if (right) next += layout.bowlSpeed;
           next = Math.min(maxBowlX, Math.max(0, next));
           if (next !== bowlXRef.current) {
             bowlXRef.current = next;
@@ -182,8 +263,11 @@ export function FridgeGameArena() {
         }
       }
 
+      applyArenaLayoutToBodies(engine, bowlBody, layout, previousLayout);
+      previousLayout = layout;
+      updateBowlBodyPosition(bowlBody, bowlXRef.current, layout);
+
       if (!isFrozen) {
-        // --- Elapsed time drives difficulty (resets on Play Again) ---
         if (gameStartTimestampRef.current === 0) {
           gameStartTimestampRef.current = timestamp;
         }
@@ -191,7 +275,8 @@ export function FridgeGameArena() {
           (timestamp - gameStartTimestampRef.current) / 1000;
         const difficulty = getDifficultySettings(elapsedSeconds);
 
-        // --- Spawn new ingredients on a ramping interval ---
+        setEngineGravity(engine, difficulty.gravityScale);
+
         if (lastSpawnRef.current === 0) {
           lastSpawnRef.current = timestamp;
         }
@@ -200,66 +285,51 @@ export function FridgeGameArena() {
           const template = pickRandomIngredientTemplate(
             difficulty.goodSpawnWeight,
           );
-          const maxSpawnX = Math.max(0, containerWidth - template.size);
+          const maxSpawnX = Math.max(0, layout.containerWidth - layout.ingredientSize);
           const spawnX = Math.random() * maxSpawnX;
           const instanceId = nextInstanceIdRef.current++;
-          itemsRef.current = [
-            ...itemsRef.current,
-            createFallingIngredient(template, instanceId, spawnX),
-          ];
-          itemsChanged = true;
+          const body = createIngredientBody(
+            template,
+            instanceId,
+            spawnX,
+            layout.ingredientSize,
+          );
+          Matter.Composite.add(engine.world, body);
         }
 
-        // --- Fall + AABB collision with bowl ---
-        const bowlRect = getBowlRect(bowlXRef.current, containerHeight);
-        const remaining: FallingIngredient[] = [];
+        stepPhysics(engine);
 
-        for (const item of itemsRef.current) {
-          const moved: FallingIngredient = {
-            ...item,
-            y: item.y + difficulty.fallSpeed,
-          };
-
-          // Off-screen: remove with no penalty for missed good items
-          if (moved.y > containerHeight) {
-            itemsChanged = true;
-            continue;
+        for (const body of Matter.Composite.allBodies(engine.world)) {
+          if (!isIngredientBody(body)) continue;
+          if (isBodyPastBottom(body, layout.containerHeight)) {
+            removeBodyFromWorld(engine, body);
           }
-
-          if (rectsOverlap(getIngredientRect(moved), bowlRect)) {
-            itemsChanged = true;
-            if (moved.kind === "good") {
-              scoreDelta += GOOD_CATCH_POINTS;
-            } else {
-              livesDelta += 1;
-            }
-            continue;
-          }
-
-          if (moved.y !== item.y) {
-            itemsChanged = true;
-          }
-          remaining.push(moved);
-        }
-
-        if (itemsChanged) {
-          itemsRef.current = remaining;
         }
       }
 
-      // --- Sync React state when sim changed ---
+      const renderItems = Matter.Composite.allBodies(engine.world)
+        .filter(isIngredientBody)
+        .map(bodyToRenderState)
+        .filter((item): item is FallingIngredient => item != null);
+
+      setArenaLayout(layout);
+      setItems(renderItems);
+
       if (bowlChanged) {
         setBowlX(bowlXRef.current);
       }
-      if (itemsChanged) {
-        setItems([...itemsRef.current]);
+
+      if (scoreDeltaRef.current > 0) {
+        const delta = scoreDeltaRef.current;
+        scoreDeltaRef.current = 0;
+        setScore((s) => s + delta);
       }
-      if (scoreDelta > 0) {
-        setScore((s) => s + scoreDelta);
-      }
-      if (livesDelta > 0) {
+
+      if (livesDeltaRef.current > 0) {
+        const delta = livesDeltaRef.current;
+        livesDeltaRef.current = 0;
         setLives((l) => {
-          const next = l - livesDelta;
+          const next = l - delta;
           if (next <= 0) {
             gameOverRef.current = true;
             setGameOver(true);
@@ -270,20 +340,23 @@ export function FridgeGameArena() {
         });
       }
 
+      handledCollisions.clear();
       frameId = requestAnimationFrame(tick);
     };
 
     frameId = requestAnimationFrame(tick);
-    return () => cancelAnimationFrame(frameId);
+
+    return () => {
+      cancelAnimationFrame(frameId);
+      destroyFridgePhysics(engine, onCollisionStart);
+    };
   }, [gameKey]);
 
   return (
     <div
       ref={containerRef}
-      className="fridge-game-shell relative w-full max-w-[800px] overflow-hidden"
-      style={{ height: "min(600px, 72vh)" }}
+      className="fridge-game-shell relative overflow-hidden"
     >
-      {/* HUD */}
       <div
         className="pointer-events-none absolute left-4 top-4 z-20 text-sm md:text-base"
         style={{
@@ -306,28 +379,24 @@ export function FridgeGameArena() {
         Score: {score}
       </div>
 
-      {/* Falling ingredients — replace IngredientSprite with <Image /> later */}
       {items.map((item) => (
         <IngredientSprite key={item.instanceId} item={item} />
       ))}
 
-      {/* Bowl */}
-      <div
-        className="absolute z-10 rounded-lg"
+      <img
+        src={BOWL_IMAGE_SRC}
+        alt="Bowl"
+        width={arenaLayout.bowlWidth}
+        height={arenaLayout.bowlHeight}
+        draggable={false}
+        decoding="async"
+        className="pointer-events-none absolute z-10 select-none object-contain"
         style={{
           left: bowlX,
-          bottom: BOWL_BOTTOM,
-          width: BOWL_WIDTH,
-          height: BOWL_HEIGHT,
-          backgroundColor: BOWL_COLOR,
-          boxShadow:
-            "inset 0 2px 4px rgba(255,255,255,0.15), 0 4px 10px rgba(0,0,0,0.35)",
+          bottom: arenaLayout.bowlBottom,
         }}
-        aria-label="Bowl"
-        role="img"
       />
 
-      {/* Game over overlay */}
       {gameOver && (
         <div className="absolute inset-0 z-30 flex flex-col items-center justify-center bg-[#0A0806]/75 px-6 text-center">
           <h2

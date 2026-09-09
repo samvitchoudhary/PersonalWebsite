@@ -233,6 +233,8 @@ body {
 
 /* Fridge mini-game shell */
 .fridge-game-shell {
+  width: min(90vw, 1400px);
+  height: min(80vh, 900px);
   border: 1px solid rgba(212, 160, 60, 0.28);
   border-radius: 6px;
   background-color: rgba(240, 230, 210, 0.05);

@@ -1,14 +1,14 @@
-/** Placeholder ingredient definitions — swap colors/shapes for images later. */
+/** Ingredient definitions — image paths map to /public/fridge/*.png */
 
 export type IngredientKind = "good" | "bad";
 
+/** Physics collision shape (circle vs square); rendering uses imageSrc */
 export type IngredientShape = "circle" | "square";
 
 export type IngredientTemplate = {
   id: string;
   kind: IngredientKind;
-  color: string;
-  size: number;
+  imageSrc: string;
   shape: IngredientShape;
   label: string;
 };
@@ -17,38 +17,116 @@ export type FallingIngredient = {
   instanceId: number;
   templateId: string;
   kind: IngredientKind;
-  color: string;
+  imageSrc: string;
   size: number;
-  shape: IngredientShape;
   label: string;
+  /** Top-left render position (synced from Matter.js each frame) */
   x: number;
   y: number;
+  /** Radians — synced from Matter.js body.angle */
+  angle: number;
 };
 
-/** Good items — colorful produce placeholders */
+export const BOWL_IMAGE_SRC = "/fridge/11.png";
+
+/** Good items */
 export const GOOD_INGREDIENTS: IngredientTemplate[] = [
-  { id: "tomato", kind: "good", color: "#C0392B", size: 40, shape: "circle", label: "Tomato" },
-  { id: "carrot", kind: "good", color: "#E67E22", size: 40, shape: "circle", label: "Carrot" },
-  { id: "lettuce", kind: "good", color: "#58A55C", size: 40, shape: "circle", label: "Lettuce" },
-  { id: "lemon", kind: "good", color: "#F1C40F", size: 40, shape: "circle", label: "Lemon" },
-  { id: "blueberry", kind: "good", color: "#5B6BBF", size: 40, shape: "circle", label: "Blueberry" },
-  { id: "cheese", kind: "good", color: "#F4D03F", size: 40, shape: "square", label: "Cheese" },
+  {
+    id: "tomato",
+    kind: "good",
+    imageSrc: "/fridge/1.png",
+    shape: "circle",
+    label: "Tomato",
+  },
+  {
+    id: "carrot",
+    kind: "good",
+    imageSrc: "/fridge/2.png",
+    shape: "circle",
+    label: "Carrot",
+  },
+  {
+    id: "lettuce",
+    kind: "good",
+    imageSrc: "/fridge/3.png",
+    shape: "circle",
+    label: "Lettuce",
+  },
+  {
+    id: "lemon",
+    kind: "good",
+    imageSrc: "/fridge/4.png",
+    shape: "circle",
+    label: "Lemon",
+  },
+  {
+    id: "blueberry",
+    kind: "good",
+    imageSrc: "/fridge/5.png",
+    shape: "circle",
+    label: "Blueberry",
+  },
+  {
+    id: "cheese",
+    kind: "good",
+    imageSrc: "/fridge/6.png",
+    shape: "square",
+    label: "Cheese",
+  },
 ];
 
-/** Bad items — moldy/burnt placeholders */
+/** Bad items */
 export const BAD_INGREDIENTS: IngredientTemplate[] = [
-  { id: "moldy", kind: "bad", color: "#5D4E37", size: 40, shape: "square", label: "Moldy item" },
-  { id: "burnt", kind: "bad", color: "#3D3226", size: 40, shape: "square", label: "Burnt item" },
-  { id: "spoiled", kind: "bad", color: "#6B5344", size: 40, shape: "square", label: "Spoiled item" },
-  { id: "rot", kind: "bad", color: "#4A3728", size: 40, shape: "square", label: "Rotten item" },
+  {
+    id: "moldy-bread",
+    kind: "bad",
+    imageSrc: "/fridge/7.png",
+    shape: "square",
+    label: "Moldy bread",
+  },
+  {
+    id: "burnt-toast",
+    kind: "bad",
+    imageSrc: "/fridge/8.png",
+    shape: "square",
+    label: "Burnt toast",
+  },
+  {
+    id: "spoiled-vegetable",
+    kind: "bad",
+    imageSrc: "/fridge/9.png",
+    shape: "square",
+    label: "Spoiled vegetable",
+  },
+  {
+    id: "rotten-apple",
+    kind: "bad",
+    imageSrc: "/fridge/10.png",
+    shape: "square",
+    label: "Rotten apple",
+  },
+];
+
+/** All ingredient image paths — useful for preloading */
+export const FRIDGE_INGREDIENT_IMAGE_SRCS = [
+  ...GOOD_INGREDIENTS.map((item) => item.imageSrc),
+  ...BAD_INGREDIENTS.map((item) => item.imageSrc),
+  BOWL_IMAGE_SRC,
 ];
 
 /** Difficulty ramp — tune these without hunting through game loop logic */
 export const DIFFICULTY_RAMP_INTERVAL_SEC = 5;
 
-export const FALL_SPEED_START = 3.5;
-export const FALL_SPEED_INCREMENT = 0.15;
-export const FALL_SPEED_MAX = 8.5;
+/** px/frame fall targets at ~60fps — converted to Matter gravity via GRAVITY_PX_FRAME_TO_SCALE */
+export const FALL_SPEED_START = 1.75;
+export const FALL_SPEED_INCREMENT = 0.075;
+export const FALL_SPEED_MAX = 4.5;
+
+/**
+ * Converts px/frame targets to engine.gravity.y.
+ * Matter uses acceleration, not constant velocity — this scale is tuned to feel similar.
+ */
+export const GRAVITY_PX_FRAME_TO_SCALE = 0.18;
 
 export const SPAWN_INTERVAL_MS_START = 1200;
 export const SPAWN_INTERVAL_DECREMENT_MS = 50;
@@ -64,23 +142,31 @@ export const DIFFICULTY_FULL_RAMP_SECONDS =
 
 export type DifficultySettings = {
   elapsedSeconds: number;
-  fallSpeed: number;
+  /** Original px/frame tuning baseline (reference only) */
+  fallSpeedTarget: number;
+  /** Applied to Matter.Engine.gravity.y */
+  gravityScale: number;
   spawnIntervalMs: number;
   goodSpawnWeight: number;
 };
 
-/** Map elapsed game time (seconds) to current difficulty parameters */
-export function getDifficultySettings(elapsedSeconds: number): DifficultySettings {
+function fallSpeedTargetForElapsed(elapsedSeconds: number): number {
   const rampSteps = elapsedSeconds / DIFFICULTY_RAMP_INTERVAL_SEC;
-
-  const fallSpeed = Math.min(
+  return Math.min(
     FALL_SPEED_MAX,
     FALL_SPEED_START + rampSteps * FALL_SPEED_INCREMENT,
   );
+}
+
+/** Map elapsed game time (seconds) to current difficulty parameters */
+export function getDifficultySettings(elapsedSeconds: number): DifficultySettings {
+  const fallSpeedTarget = fallSpeedTargetForElapsed(elapsedSeconds);
 
   const spawnIntervalMs = Math.max(
     SPAWN_INTERVAL_MS_MIN,
-    SPAWN_INTERVAL_MS_START - rampSteps * SPAWN_INTERVAL_DECREMENT_MS,
+    SPAWN_INTERVAL_MS_START -
+      (elapsedSeconds / DIFFICULTY_RAMP_INTERVAL_SEC) *
+        SPAWN_INTERVAL_DECREMENT_MS,
   );
 
   const difficultyProgress = Math.min(1, elapsedSeconds / DIFFICULTY_FULL_RAMP_SECONDS);
@@ -90,7 +176,8 @@ export function getDifficultySettings(elapsedSeconds: number): DifficultySetting
 
   return {
     elapsedSeconds,
-    fallSpeed,
+    fallSpeedTarget,
+    gravityScale: fallSpeedTarget * GRAVITY_PX_FRAME_TO_SCALE,
     spawnIntervalMs,
     goodSpawnWeight,
   };
@@ -103,62 +190,41 @@ export function pickRandomIngredientTemplate(
   return pool[Math.floor(Math.random() * pool.length)]!;
 }
 
-export function createFallingIngredient(
-  template: IngredientTemplate,
-  instanceId: number,
-  x: number,
-): FallingIngredient {
-  return {
-    instanceId,
-    templateId: template.id,
-    kind: template.kind,
-    color: template.color,
-    size: template.size,
-    shape: template.shape,
-    label: template.label,
-    x,
-    y: 0,
-  };
-}
+/** Proportional sprite/layout sizing — tuned for ~800px-wide arena (40px items, 80×40 bowl) */
+export const INGREDIENT_SIZE_PCT = 0.05;
+export const BOWL_WIDTH_PCT = 0.1;
+/** Bowl height = bowlWidth × this ratio (preserves prior 80×40 aspect) */
+export const BOWL_HEIGHT_TO_WIDTH = 0.5;
+/** Distance from container bottom edge to bowl bottom edge */
+export const BOWL_BOTTOM_HEIGHT_PCT = 0.033;
+/** Horizontal bowl speed as fraction of container width per frame */
+export const BOWL_SPEED_WIDTH_PCT = 0.00875;
 
-type Rect = { left: number; top: number; right: number; bottom: number };
+export type ArenaLayout = {
+  containerWidth: number;
+  containerHeight: number;
+  ingredientSize: number;
+  bowlWidth: number;
+  bowlHeight: number;
+  bowlBottom: number;
+  bowlSpeed: number;
+};
 
-export function rectsOverlap(a: Rect, b: Rect): boolean {
-  return (
-    a.left < b.right &&
-    a.right > b.left &&
-    a.top < b.bottom &&
-    a.bottom > b.top
-  );
-}
-
-export function getBowlRect(
-  bowlX: number,
+export function getArenaLayout(
+  containerWidth: number,
   containerHeight: number,
-): Rect {
+): ArenaLayout {
+  const bowlWidth = containerWidth * BOWL_WIDTH_PCT;
   return {
-    left: bowlX,
-    top: containerHeight - BOWL_BOTTOM - BOWL_HEIGHT,
-    right: bowlX + BOWL_WIDTH,
-    bottom: containerHeight - BOWL_BOTTOM,
+    containerWidth,
+    containerHeight,
+    ingredientSize: containerWidth * INGREDIENT_SIZE_PCT,
+    bowlWidth,
+    bowlHeight: bowlWidth * BOWL_HEIGHT_TO_WIDTH,
+    bowlBottom: containerHeight * BOWL_BOTTOM_HEIGHT_PCT,
+    bowlSpeed: containerWidth * BOWL_SPEED_WIDTH_PCT,
   };
 }
-
-export function getIngredientRect(item: FallingIngredient): Rect {
-  return {
-    left: item.x,
-    top: item.y,
-    right: item.x + item.size,
-    bottom: item.y + item.size,
-  };
-}
-
-/** Shared layout constants for bowl + collision math */
-export const BOWL_WIDTH = 80;
-export const BOWL_HEIGHT = 40;
-export const BOWL_BOTTOM = 20;
-export const BOWL_SPEED = 7;
-export const BOWL_COLOR = "#8B5A2B";
 
 export const GOOD_CATCH_POINTS = 10;
 export const INITIAL_LIVES = 3;
