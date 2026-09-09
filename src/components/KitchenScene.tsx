@@ -9,6 +9,10 @@ import { transformOriginPercentFromShape } from "@/lib/hotspotGeometry";
 import { KITCHEN_PAGE_ROUTES } from "@/lib/kitchenPageRoutes";
 import { useKitchenPageExitZoom } from "@/hooks/useKitchenPageExitZoom";
 import { KitchenExitZoomLayer } from "@/components/kitchen/KitchenExitZoomLayer";
+import { SteamEffect } from "@/components/kitchen/SteamEffect";
+import { LampGlow } from "@/components/kitchen/LampGlow";
+import { WindowFireflies } from "@/components/kitchen/WindowFireflies";
+import { DustMotes } from "@/components/kitchen/DustMotes";
 import { KitchenHotspotOverlay } from "./KitchenHotspotOverlay";
 import { Modal } from "./Modal";
 import { Cooking } from "./sections/Cooking";
@@ -145,6 +149,10 @@ export function KitchenScene() {
             zIndex: 0,
           }}
         />
+        <LampGlow />
+        <WindowFireflies />
+        <DustMotes />
+        <SteamEffect />
         <KitchenHotspotOverlay
           hotspots={hotspots}
           debug={hotspotDebug}

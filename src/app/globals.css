@@ -78,6 +78,424 @@ body {
   font-family: ui-monospace, monospace;
 }
 
+.kitchen-steam-wisp {
+  pointer-events: none;
+  transform-box: fill-box;
+  transform-origin: center;
+  will-change: transform, opacity;
+}
+
+@keyframes kitchen-steam-rise-a {
+  0% {
+    opacity: 0;
+    transform: translate(0, 8px) scale(0.55);
+  }
+  16% {
+    opacity: 0.38;
+  }
+  100% {
+    opacity: 0;
+    transform: translate(28px, -320px) scale(1.55);
+  }
+}
+
+@keyframes kitchen-steam-rise-b {
+  0% {
+    opacity: 0;
+    transform: translate(0, 6px) scale(0.6);
+  }
+  20% {
+    opacity: 0.32;
+  }
+  100% {
+    opacity: 0;
+    transform: translate(-24px, -280px) scale(1.4);
+  }
+}
+
+@keyframes kitchen-steam-rise-c {
+  0% {
+    opacity: 0;
+    transform: translate(0, 10px) scale(0.5);
+  }
+  14% {
+    opacity: 0.36;
+  }
+  100% {
+    opacity: 0;
+    transform: translate(16px, -350px) scale(1.6);
+  }
+}
+
+@keyframes kitchen-steam-rise-d {
+  0% {
+    opacity: 0;
+    transform: translate(0, 5px) scale(0.65);
+  }
+  18% {
+    opacity: 0.3;
+  }
+  100% {
+    opacity: 0;
+    transform: translate(-32px, -260px) scale(1.35);
+  }
+}
+
+@keyframes kitchen-steam-rise-e {
+  0% {
+    opacity: 0;
+    transform: translate(0, 8px) scale(0.58);
+  }
+  22% {
+    opacity: 0.34;
+  }
+  100% {
+    opacity: 0;
+    transform: translate(12px, -300px) scale(1.48);
+  }
+}
+
+@keyframes kitchen-steam-rise-f {
+  0% {
+    opacity: 0;
+    transform: translate(0, 7px) scale(0.52);
+  }
+  18% {
+    opacity: 0.33;
+  }
+  100% {
+    opacity: 0;
+    transform: translate(-18px, -310px) scale(1.5);
+  }
+}
+
+@keyframes kitchen-steam-rise-g {
+  0% {
+    opacity: 0;
+    transform: translate(0, 9px) scale(0.57);
+  }
+  15% {
+    opacity: 0.37;
+  }
+  100% {
+    opacity: 0;
+    transform: translate(22px, -340px) scale(1.52);
+  }
+}
+
+.kitchen-steam-wisp-a {
+  animation: kitchen-steam-rise-a 5.4s ease-out infinite;
+}
+
+.kitchen-steam-wisp-b {
+  animation: kitchen-steam-rise-b 4.6s ease-out infinite;
+  animation-delay: 1.1s;
+}
+
+.kitchen-steam-wisp-c {
+  animation: kitchen-steam-rise-c 6s ease-out infinite;
+  animation-delay: 2.2s;
+}
+
+.kitchen-steam-wisp-d {
+  animation: kitchen-steam-rise-d 4.2s ease-out infinite;
+  animation-delay: 3.4s;
+}
+
+.kitchen-steam-wisp-e {
+  animation: kitchen-steam-rise-e 5.1s ease-out infinite;
+  animation-delay: 0.8s;
+}
+
+.kitchen-steam-wisp-f {
+  animation: kitchen-steam-rise-f 5.7s ease-out infinite;
+  animation-delay: 2.8s;
+}
+
+.kitchen-steam-wisp-g {
+  animation: kitchen-steam-rise-g 4.8s ease-out infinite;
+  animation-delay: 4.1s;
+}
+
+/* Kitchen atmosphere: lamp, fireflies, dust */
+.kitchen-lamp-glow {
+  pointer-events: none;
+  transform-box: fill-box;
+  transform-origin: center;
+  will-change: transform, opacity;
+  animation: kitchen-lamp-pulse 4s ease-in-out infinite;
+}
+
+@keyframes kitchen-lamp-pulse {
+  0%,
+  100% {
+    opacity: 0.28;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.4;
+    transform: scale(1.08);
+  }
+}
+
+.kitchen-firefly {
+  pointer-events: none;
+  transform-box: fill-box;
+  transform-origin: center;
+  will-change: transform, opacity;
+}
+
+@keyframes kitchen-firefly-a {
+  0%,
+  100% {
+    opacity: 0.15;
+    transform: translate(0, 0);
+  }
+  50% {
+    opacity: 1;
+    transform: translate(3px, -4px);
+  }
+}
+
+@keyframes kitchen-firefly-b {
+  0%,
+  100% {
+    opacity: 0.2;
+    transform: translate(0, 0);
+  }
+  45% {
+    opacity: 0.95;
+    transform: translate(-4px, 3px);
+  }
+}
+
+@keyframes kitchen-firefly-c {
+  0%,
+  100% {
+    opacity: 0.12;
+    transform: translate(0, 0);
+  }
+  55% {
+    opacity: 1;
+    transform: translate(2px, -5px);
+  }
+}
+
+@keyframes kitchen-firefly-d {
+  0%,
+  100% {
+    opacity: 0.18;
+    transform: translate(0, 0);
+  }
+  40% {
+    opacity: 0.9;
+    transform: translate(-3px, -2px);
+  }
+}
+
+@keyframes kitchen-firefly-e {
+  0%,
+  100% {
+    opacity: 0.1;
+    transform: translate(0, 0);
+  }
+  60% {
+    opacity: 1;
+    transform: translate(4px, 2px);
+  }
+}
+
+@keyframes kitchen-firefly-f {
+  0%,
+  100% {
+    opacity: 0.22;
+    transform: translate(0, 0);
+  }
+  50% {
+    opacity: 0.85;
+    transform: translate(-2px, 4px);
+  }
+}
+
+@keyframes kitchen-firefly-g {
+  0%,
+  100% {
+    opacity: 0.16;
+    transform: translate(0, 0);
+  }
+  48% {
+    opacity: 1;
+    transform: translate(3px, -3px);
+  }
+}
+
+.kitchen-firefly-a {
+  animation: kitchen-firefly-a 3.2s ease-in-out infinite;
+}
+.kitchen-firefly-b {
+  animation: kitchen-firefly-b 4.6s ease-in-out infinite;
+  animation-delay: 0.4s;
+}
+.kitchen-firefly-c {
+  animation: kitchen-firefly-c 2.4s ease-in-out infinite;
+  animation-delay: 1.1s;
+}
+.kitchen-firefly-d {
+  animation: kitchen-firefly-d 5s ease-in-out infinite;
+  animation-delay: 0.8s;
+}
+.kitchen-firefly-e {
+  animation: kitchen-firefly-e 3.8s ease-in-out infinite;
+  animation-delay: 1.6s;
+}
+.kitchen-firefly-f {
+  animation: kitchen-firefly-f 2.8s ease-in-out infinite;
+  animation-delay: 2.2s;
+}
+.kitchen-firefly-g {
+  animation: kitchen-firefly-g 4.2s ease-in-out infinite;
+  animation-delay: 0.2s;
+}
+
+.kitchen-dust-mote {
+  pointer-events: none;
+  transform-box: fill-box;
+  transform-origin: center;
+  will-change: transform, opacity;
+  opacity: 0.85;
+}
+
+@keyframes kitchen-dust-a {
+  0%,
+  100% {
+    transform: translate(0, 0);
+  }
+  50% {
+    transform: translate(18px, -28px);
+  }
+}
+@keyframes kitchen-dust-b {
+  0%,
+  100% {
+    transform: translate(0, 0);
+  }
+  50% {
+    transform: translate(-22px, 16px);
+  }
+}
+@keyframes kitchen-dust-c {
+  0%,
+  100% {
+    transform: translate(0, 0);
+  }
+  50% {
+    transform: translate(12px, 24px);
+  }
+}
+@keyframes kitchen-dust-d {
+  0%,
+  100% {
+    transform: translate(0, 0);
+  }
+  50% {
+    transform: translate(-16px, -20px);
+  }
+}
+@keyframes kitchen-dust-e {
+  0%,
+  100% {
+    transform: translate(0, 0);
+  }
+  50% {
+    transform: translate(26px, -10px);
+  }
+}
+@keyframes kitchen-dust-f {
+  0%,
+  100% {
+    transform: translate(0, 0);
+  }
+  50% {
+    transform: translate(-10px, 22px);
+  }
+}
+@keyframes kitchen-dust-g {
+  0%,
+  100% {
+    transform: translate(0, 0);
+  }
+  50% {
+    transform: translate(20px, 14px);
+  }
+}
+@keyframes kitchen-dust-h {
+  0%,
+  100% {
+    transform: translate(0, 0);
+  }
+  50% {
+    transform: translate(-24px, -12px);
+  }
+}
+@keyframes kitchen-dust-i {
+  0%,
+  100% {
+    transform: translate(0, 0);
+  }
+  50% {
+    transform: translate(8px, -26px);
+  }
+}
+@keyframes kitchen-dust-j {
+  0%,
+  100% {
+    transform: translate(0, 0);
+  }
+  50% {
+    transform: translate(-14px, 18px);
+  }
+}
+
+.kitchen-dust-mote-a {
+  animation: kitchen-dust-a 12s ease-in-out infinite;
+}
+.kitchen-dust-mote-b {
+  animation: kitchen-dust-b 9s ease-in-out infinite;
+  animation-delay: 1s;
+}
+.kitchen-dust-mote-c {
+  animation: kitchen-dust-c 14s ease-in-out infinite;
+  animation-delay: 2.2s;
+}
+.kitchen-dust-mote-d {
+  animation: kitchen-dust-d 11s ease-in-out infinite;
+  animation-delay: 0.6s;
+}
+.kitchen-dust-mote-e {
+  animation: kitchen-dust-e 15s ease-in-out infinite;
+  animation-delay: 3s;
+}
+.kitchen-dust-mote-f {
+  animation: kitchen-dust-f 8.5s ease-in-out infinite;
+  animation-delay: 1.8s;
+}
+.kitchen-dust-mote-g {
+  animation: kitchen-dust-g 13s ease-in-out infinite;
+  animation-delay: 0.4s;
+}
+.kitchen-dust-mote-h {
+  animation: kitchen-dust-h 10s ease-in-out infinite;
+  animation-delay: 2.6s;
+}
+.kitchen-dust-mote-i {
+  animation: kitchen-dust-i 12.5s ease-in-out infinite;
+  animation-delay: 1.4s;
+}
+.kitchen-dust-mote-j {
+  animation: kitchen-dust-j 9.5s ease-in-out infinite;
+  animation-delay: 3.4s;
+}
+
 /* Contact page SVG polygon hotspots */
 .contact-hotspot-svg {
   pointer-events: none;
