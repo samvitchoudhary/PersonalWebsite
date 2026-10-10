@@ -46,7 +46,7 @@ export interface AboutFact {
 
 export interface CookingItem {
   title: string;
-  status: "Active" | "Studying";
+  status: "Active" | "Studying" | "Completed";
   description: string;
 }
 

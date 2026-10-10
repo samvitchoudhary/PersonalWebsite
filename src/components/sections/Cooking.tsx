@@ -22,13 +22,20 @@ export function Cooking({ theme }: { theme: ModalTheme }) {
             </h3>
             <span
               className="rounded-full px-2 py-0.5 text-[11px] font-medium uppercase tracking-wide"
-              style={{
-                backgroundColor:
-                  item.status === "Active"
-                    ? `${theme.accent}40`
-                    : "rgba(255,255,255,0.12)",
-                color: theme.text,
-              }}
+              style={
+                item.status === "Completed"
+                  ? {
+                      backgroundColor: "rgba(122, 148, 72, 0.42)",
+                      color: "#D8E8B8",
+                    }
+                  : {
+                      backgroundColor:
+                        item.status === "Active"
+                          ? `${theme.accent}40`
+                          : "rgba(255,255,255,0.12)",
+                      color: theme.text,
+                    }
+              }
             >
               {item.status}
             </span>

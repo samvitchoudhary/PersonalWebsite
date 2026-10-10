@@ -16,13 +16,14 @@ import { DustMotes } from "@/components/kitchen/DustMotes";
 import { KitchenHotspotOverlay } from "./KitchenHotspotOverlay";
 import { Modal } from "./Modal";
 import { Cooking } from "./sections/Cooking";
+import { FridgeComingSoon } from "./sections/FridgeComingSoon";
 import type { ComponentType } from "react";
 
 type SectionComponent = ComponentType<{ theme: ModalTheme }>;
 
 type ModalHotspotId = Exclude<
   HotspotId,
-  "about" | "skills" | "contact" | "resume" | "projects" | "fridge"
+  "about" | "skills" | "contact" | "resume" | "projects"
 >;
 
 const modalRegistry: Record<
@@ -44,6 +45,17 @@ const modalRegistry: Record<
       card: "#3D2818",
     },
     Section: Cooking,
+  },
+  fridge: {
+    subtitle: "Coming Soon",
+    title: "The Fridge",
+    theme: {
+      bg: "#1A1610",
+      accent: "#D4A03C",
+      text: "#F5E6C8",
+      card: "#2A2318",
+    },
+    Section: FridgeComingSoon,
   },
 };
 

@@ -142,9 +142,9 @@ export const cookingItems: CookingItem[] = [
   },
   {
     title: "AWS Cloud Practitioner Certification",
-    status: "Studying",
+    status: "Completed",
     description:
-      "Working toward the AWS Certified Cloud Practitioner certification.",
+      "Earned the AWS Certified Cloud Practitioner certification.",
   },
 ];
 
