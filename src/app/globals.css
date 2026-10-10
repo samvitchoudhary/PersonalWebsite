@@ -91,7 +91,7 @@ body {
     transform: translate(0, 8px) scale(0.55);
   }
   16% {
-    opacity: 0.38;
+    opacity: var(--kitchen-steam-peak, 0.5);
   }
   100% {
     opacity: 0;
@@ -105,7 +105,7 @@ body {
     transform: translate(0, 6px) scale(0.6);
   }
   20% {
-    opacity: 0.32;
+    opacity: var(--kitchen-steam-peak, 0.5);
   }
   100% {
     opacity: 0;
@@ -119,7 +119,7 @@ body {
     transform: translate(0, 10px) scale(0.5);
   }
   14% {
-    opacity: 0.36;
+    opacity: var(--kitchen-steam-peak, 0.5);
   }
   100% {
     opacity: 0;
@@ -133,7 +133,7 @@ body {
     transform: translate(0, 5px) scale(0.65);
   }
   18% {
-    opacity: 0.3;
+    opacity: var(--kitchen-steam-peak, 0.5);
   }
   100% {
     opacity: 0;
@@ -147,7 +147,7 @@ body {
     transform: translate(0, 8px) scale(0.58);
   }
   22% {
-    opacity: 0.34;
+    opacity: var(--kitchen-steam-peak, 0.5);
   }
   100% {
     opacity: 0;
@@ -161,7 +161,7 @@ body {
     transform: translate(0, 7px) scale(0.52);
   }
   18% {
-    opacity: 0.33;
+    opacity: var(--kitchen-steam-peak, 0.5);
   }
   100% {
     opacity: 0;
@@ -175,7 +175,7 @@ body {
     transform: translate(0, 9px) scale(0.57);
   }
   15% {
-    opacity: 0.37;
+    opacity: var(--kitchen-steam-peak, 0.5);
   }
   100% {
     opacity: 0;
@@ -229,12 +229,12 @@ body {
 @keyframes kitchen-lamp-pulse {
   0%,
   100% {
-    opacity: 0.28;
+    opacity: var(--kitchen-lamp-trough, 0.32);
     transform: scale(1);
   }
   50% {
-    opacity: 0.4;
-    transform: scale(1.08);
+    opacity: var(--kitchen-lamp-peak, 0.5);
+    transform: scale(var(--kitchen-lamp-scale, 1.08));
   }
 }
 
@@ -248,11 +248,11 @@ body {
 @keyframes kitchen-firefly-a {
   0%,
   100% {
-    opacity: 0.15;
+    opacity: var(--kitchen-firefly-min, 0.19);
     transform: translate(0, 0);
   }
   50% {
-    opacity: 1;
+    opacity: var(--kitchen-firefly-peak, 0.95);
     transform: translate(3px, -4px);
   }
 }
@@ -260,11 +260,11 @@ body {
 @keyframes kitchen-firefly-b {
   0%,
   100% {
-    opacity: 0.2;
+    opacity: var(--kitchen-firefly-min, 0.19);
     transform: translate(0, 0);
   }
   45% {
-    opacity: 0.95;
+    opacity: var(--kitchen-firefly-peak, 0.95);
     transform: translate(-4px, 3px);
   }
 }
@@ -272,11 +272,11 @@ body {
 @keyframes kitchen-firefly-c {
   0%,
   100% {
-    opacity: 0.12;
+    opacity: var(--kitchen-firefly-min, 0.19);
     transform: translate(0, 0);
   }
   55% {
-    opacity: 1;
+    opacity: var(--kitchen-firefly-peak, 0.95);
     transform: translate(2px, -5px);
   }
 }
@@ -284,11 +284,11 @@ body {
 @keyframes kitchen-firefly-d {
   0%,
   100% {
-    opacity: 0.18;
+    opacity: var(--kitchen-firefly-min, 0.19);
     transform: translate(0, 0);
   }
   40% {
-    opacity: 0.9;
+    opacity: var(--kitchen-firefly-peak, 0.95);
     transform: translate(-3px, -2px);
   }
 }
@@ -296,11 +296,11 @@ body {
 @keyframes kitchen-firefly-e {
   0%,
   100% {
-    opacity: 0.1;
+    opacity: var(--kitchen-firefly-min, 0.19);
     transform: translate(0, 0);
   }
   60% {
-    opacity: 1;
+    opacity: var(--kitchen-firefly-peak, 0.95);
     transform: translate(4px, 2px);
   }
 }
@@ -308,11 +308,11 @@ body {
 @keyframes kitchen-firefly-f {
   0%,
   100% {
-    opacity: 0.22;
+    opacity: var(--kitchen-firefly-min, 0.19);
     transform: translate(0, 0);
   }
   50% {
-    opacity: 0.85;
+    opacity: var(--kitchen-firefly-peak, 0.95);
     transform: translate(-2px, 4px);
   }
 }
@@ -320,11 +320,11 @@ body {
 @keyframes kitchen-firefly-g {
   0%,
   100% {
-    opacity: 0.16;
+    opacity: var(--kitchen-firefly-min, 0.19);
     transform: translate(0, 0);
   }
   48% {
-    opacity: 1;
+    opacity: var(--kitchen-firefly-peak, 0.95);
     transform: translate(3px, -3px);
   }
 }
@@ -362,7 +362,6 @@ body {
   transform-box: fill-box;
   transform-origin: center;
   will-change: transform, opacity;
-  opacity: 0.85;
 }
 
 @keyframes kitchen-dust-a {
