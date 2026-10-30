@@ -1,9 +1,14 @@
 "use client";
 
+import dynamic from "next/dynamic";
 import { motion } from "framer-motion";
 import { BackToKitchenButton } from "@/components/kitchen/BackToKitchenButton";
-import { FridgeGameArena } from "@/components/fridge/FridgeGameArena";
 import { FridgePlaceholder } from "@/components/fridge/FridgePlaceholder";
+
+const FridgeGameArena = dynamic(
+  () => import("@/components/fridge/FridgeGameArena").then((mod) => ({ default: mod.FridgeGameArena })),
+  { ssr: false }
+);
 
 const GOLD = "#D4A03C";
 const BG = "#0A0806";

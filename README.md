@@ -1,36 +1,94 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Samvit's Kitchen
+
+An interactive portfolio website (samvitchoudhary.dev) featuring a watercolor kitchen scene where visitors can explore different aspects of my work and interests.
+
+## Tech Stack
+
+- **Framework**: Next.js 16.4.3 (App Router)
+- **React**: 19.3.1
+- **Styling**: Tailwind CSS 4
+- **Animation**: Framer Motion 12.38.0
+- **Physics**: Matter.js 0.20.0 (for the fridge game)
+- **Font**: Crimson Pro (Google Fonts)
+- **TypeScript**: 5
 
 ## Getting Started
 
-First, run the development server:
+Install dependencies:
+
+```bash
+npm install
+```
+
+Run the development server:
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:3000](http://localhost:3000) to see the kitchen.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+Build for production:
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```bash
+npm run build
+npm start
+```
 
-## Learn More
+Lint the codebase:
 
-To learn more about Next.js, take a look at the following resources:
+```bash
+npm run lint
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Project Structure
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+```
+src/
+├── app/                    # Next.js app router pages
+│   ├── about/             # About page with scrolling story
+│   ├── contact/           # Contact page with interactive post-it
+│   ├── fridge/            # Fridge physics game (dev only)
+│   ├── projects/          # Cookbook-style projects page
+│   ├── resume/            # Resume viewer
+│   ├── skills/            # Skills spice rack
+│   ├── layout.tsx         # Root layout with Crimson Pro font
+│   └── page.tsx           # Home page (kitchen scene)
+├── components/
+│   ├── about/             # About page scroll components
+│   ├── fridge/            # Fridge game physics and ingredients
+│   ├── kitchen/           # Kitchen effects (steam, fireflies, dust, lamp glow)
+│   ├── projects/          # Cookbook recipe layouts
+│   ├── sections/          # Modal sections (cooking, etc.)
+│   ├── KitchenHotspotOverlay.tsx
+│   ├── KitchenScene.tsx   # Main kitchen with clickable hotspots
+│   └── Modal.tsx          # Themed modal wrapper
+├── data/                  # Content data (hotspots, projects, etc.)
+├── hooks/                 # Custom React hooks
+├── lib/                   # Utilities (geometry, routes, animations)
+└── types/                 # TypeScript type definitions
 
-## Deploy on Vercel
+public/
+├── aboutMeImages/         # Photos for the about page
+├── fridge/                # Ingredient PNGs for fridge game
+├── Contact.png            # Contact page background
+├── PersonalWebsite.png    # Main kitchen illustration
+├── Skills.png             # Skills page spice rack
+└── SamvitChoudhary_Resume.pdf
+```
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## Features
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- **Interactive Kitchen**: Hover over items (stove, fridge, cookbook, etc.) to explore different sections
+- **Watercolor Aesthetic**: Hand-drawn watercolor kitchen with animated effects (steam, fireflies, dust motes)
+- **Page Transitions**: Smooth zoom transitions between kitchen and detail pages
+- **Fridge Physics Game**: Matter.js-powered ingredient catching game (development only)
+- **Responsive**: Works on mobile and desktop
+- **Themed Modals**: Each hotspot has its own color palette
+
+## Development Notes
+
+- The fridge game is dynamically imported and only shown in development builds
+- Hotspot debug mode can be toggled with the 'D' key in development
+- Kitchen scene uses SVG polygon hotspots for click detection
+- Bridge reveal overlay provides smooth transitions from kitchen to detail pages

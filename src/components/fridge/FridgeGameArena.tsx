@@ -1,7 +1,7 @@
 "use client";
 
 import Matter, { type Engine, type IEventCollision } from "matter-js";
-import { useCallback, useEffect, useLayoutEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useLayoutEffect, useRef, useState, startTransition } from "react";
 import {
   applyArenaLayoutToBodies,
   bodyToRenderState,
@@ -54,6 +54,7 @@ function IngredientSprite({ item }: { item: FallingIngredient }) {
       aria-hidden
       draggable={false}
       decoding="async"
+      loading="lazy"
       width={item.size}
       height={item.size}
       className="pointer-events-none absolute select-none"
@@ -100,13 +101,17 @@ export function FridgeGameArena() {
     return layout;
   }, []);
 
-  const centerBowl = useCallback(() => {
+  const getCenteredBowlX = useCallback(() => {
     const layout = syncLayoutFromContainer();
     const maxX = Math.max(0, layout.containerWidth - layout.bowlWidth);
-    const centered = maxX / 2;
+    return maxX / 2;
+  }, [syncLayoutFromContainer]);
+
+  const centerBowl = useCallback(() => {
+    const centered = getCenteredBowlX();
     bowlXRef.current = centered;
     setBowlX(centered);
-  }, [syncLayoutFromContainer]);
+  }, [getCenteredBowlX]);
 
   const resetGame = useCallback(() => {
     keysRef.current = { left: false, right: false };
@@ -125,8 +130,13 @@ export function FridgeGameArena() {
   }, [centerBowl]);
 
   useLayoutEffect(() => {
-    // eslint-disable-next-line react-hooks/set-state-in-effect
-    centerBowl();
+    const layout = syncLayoutFromContainer();
+    const maxX = Math.max(0, layout.containerWidth - layout.bowlWidth);
+    const centered = maxX / 2;
+    bowlXRef.current = centered;
+    startTransition(() => {
+      setBowlX(centered);
+    });
 
     const el = containerRef.current;
     if (!el) return;

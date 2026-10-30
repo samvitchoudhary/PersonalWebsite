@@ -1,4 +1,4 @@
-/** Ingredient definitions — image paths map to /public/fridge/*.png */
+/** Ingredient definitions — image paths map to /public/fridge/*.webp */
 
 export type IngredientKind = "good" | "bad";
 
@@ -27,49 +27,49 @@ export type FallingIngredient = {
   angle: number;
 };
 
-export const BOWL_IMAGE_SRC = "/fridge/11.png";
+export const BOWL_IMAGE_SRC = "/fridge/11.webp";
 
 /** Good items */
 export const GOOD_INGREDIENTS: IngredientTemplate[] = [
   {
     id: "tomato",
     kind: "good",
-    imageSrc: "/fridge/1.png",
+    imageSrc: "/fridge/1.webp",
     shape: "circle",
     label: "Tomato",
   },
   {
     id: "carrot",
     kind: "good",
-    imageSrc: "/fridge/2.png",
+    imageSrc: "/fridge/2.webp",
     shape: "circle",
     label: "Carrot",
   },
   {
     id: "lettuce",
     kind: "good",
-    imageSrc: "/fridge/3.png",
+    imageSrc: "/fridge/3.webp",
     shape: "circle",
     label: "Lettuce",
   },
   {
     id: "lemon",
     kind: "good",
-    imageSrc: "/fridge/4.png",
+    imageSrc: "/fridge/4.webp",
     shape: "circle",
     label: "Lemon",
   },
   {
     id: "blueberry",
     kind: "good",
-    imageSrc: "/fridge/5.png",
+    imageSrc: "/fridge/5.webp",
     shape: "circle",
     label: "Blueberry",
   },
   {
     id: "cheese",
     kind: "good",
-    imageSrc: "/fridge/6.png",
+    imageSrc: "/fridge/6.webp",
     shape: "square",
     label: "Cheese",
   },
@@ -80,28 +80,28 @@ export const BAD_INGREDIENTS: IngredientTemplate[] = [
   {
     id: "moldy-bread",
     kind: "bad",
-    imageSrc: "/fridge/7.png",
+    imageSrc: "/fridge/7.webp",
     shape: "square",
     label: "Moldy bread",
   },
   {
     id: "burnt-toast",
     kind: "bad",
-    imageSrc: "/fridge/8.png",
+    imageSrc: "/fridge/8.webp",
     shape: "square",
     label: "Burnt toast",
   },
   {
     id: "spoiled-vegetable",
     kind: "bad",
-    imageSrc: "/fridge/9.png",
+    imageSrc: "/fridge/9.webp",
     shape: "square",
     label: "Spoiled vegetable",
   },
   {
     id: "rotten-apple",
     kind: "bad",
-    imageSrc: "/fridge/10.png",
+    imageSrc: "/fridge/10.webp",
     shape: "square",
     label: "Rotten apple",
   },

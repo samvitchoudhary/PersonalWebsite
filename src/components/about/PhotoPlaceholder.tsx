@@ -45,11 +45,33 @@ export function AboutPhoto({
   className?: string;
   noRound?: boolean;
 }) {
+  const baseName = src.replace(/\.(jpg|jpeg|png)$/, "");
+  
   return (
     <div
       className={`min-h-[120px] overflow-hidden ${noRound ? "rounded-none" : "rounded-2xl"} ${className}`}
     >
-      <img src={src} alt={alt} className="h-full w-full object-cover" />
+      <picture>
+        <source
+          media="(max-width: 768px)"
+          srcSet={`${baseName}-mobile.avif`}
+          type="image/avif"
+        />
+        <source
+          media="(max-width: 768px)"
+          srcSet={`${baseName}-mobile.webp`}
+          type="image/webp"
+        />
+        <source
+          srcSet={`${baseName}.avif`}
+          type="image/avif"
+        />
+        <source
+          srcSet={`${baseName}.webp`}
+          type="image/webp"
+        />
+        <img src={src} alt={alt} className="h-full w-full object-cover" loading="lazy" />
+      </picture>
     </div>
   );
 }
