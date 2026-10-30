@@ -74,6 +74,8 @@ export function KitchenScene() {
   const [hotspotDebug, setHotspotDebug] = useState(false);
 
   useEffect(() => {
+    if (process.env.NODE_ENV !== "development") return;
+    
     const onKey = (e: KeyboardEvent) => {
       const t = e.target;
       if (

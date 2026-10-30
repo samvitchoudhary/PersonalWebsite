@@ -1,8 +1,8 @@
 "use client";
 
-import Link from "next/link";
 import { useState, type ReactNode } from "react";
 import { AnimatePresence, motion } from "framer-motion";
+import { BackToKitchenButton } from "@/components/kitchen/BackToKitchenButton";
 import {
   cookbookProjects,
   INGREDIENT_BULLETS,
@@ -15,28 +15,6 @@ const GOLD = "#D4A03C";
 const INK = "#3D2817";
 const MUTED_INK = "#6B5344";
 const BG = "#0A0806";
-
-function BackButton() {
-  return (
-    <div className="fixed left-4 top-4 z-50 md:left-6 md:top-6">
-      <Link
-        href="/"
-        className="inline-flex items-center gap-2 rounded-full border px-4 py-2.5 text-sm backdrop-blur-md transition-opacity hover:opacity-90"
-        style={{
-          fontFamily: "var(--font-crimson-pro), serif",
-          backgroundColor: "rgba(26, 21, 16, 0.85)",
-          borderColor: "rgba(212, 160, 60, 0.25)",
-          color: CREAM,
-        }}
-      >
-        <span aria-hidden className="text-lg leading-none">
-          ←
-        </span>
-        Back to Kitchen
-      </Link>
-    </div>
-  );
-}
 
 function BookShell({ children }: { children: ReactNode }) {
   return (
@@ -483,7 +461,7 @@ export function CookbookPage() {
       style={{ backgroundColor: BG, color: CREAM }}
     >
       <div className="cookbook-vignette pointer-events-none absolute inset-0" aria-hidden />
-      <BackButton />
+      <BackToKitchenButton />
 
       <div className="relative z-10 flex min-h-[100dvh] items-center justify-center px-4 py-20 md:px-8 md:py-16">
         <AnimatePresence mode="wait">
