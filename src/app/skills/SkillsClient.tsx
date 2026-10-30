@@ -13,12 +13,22 @@ export default function SkillsClient() {
       style={{ backgroundColor: PARCHMENT }}
     >
       <KitchenBridgeRevealOverlay />
-      {/* eslint-disable-next-line @next/next/no-img-element */}
-      <img
-        src="/Skills.png"
-        alt="Spice rack of skills — Languages, Frameworks, and Tools"
-        className="relative z-0 h-full w-full object-contain object-center"
-      />
+      <picture>
+        <source
+          srcSet="/Skills.avif"
+          type="image/avif"
+        />
+        <source
+          srcSet="/Skills.webp"
+          type="image/webp"
+        />
+        <img
+          src="/Skills.png"
+          alt="Spice rack of skills — Languages, Frameworks, and Tools"
+          className="relative z-0 h-full w-full object-contain object-center"
+          loading="lazy"
+        />
+      </picture>
 
       <BackToKitchenButton />
     </div>
