@@ -141,6 +141,7 @@ function BackButton() {
           backgroundColor: "rgba(26, 21, 16, 0.85)",
           borderColor: "rgba(212, 160, 60, 0.25)",
           color: CREAM,
+          touchAction: "manipulation",
         }}
       >
         <span aria-hidden className="text-lg leading-none">
@@ -392,9 +393,9 @@ function FoodieSection({ activeIndex }: { activeIndex: number }) {
         </p>
       </motion.div>
 
-      <div className="relative z-[1] mx-auto mt-2 w-full max-w-5xl flex-1 md:min-h-0">
+      <div className="relative z-[1] mx-auto mt-2 w-full max-w-5xl flex-1 overflow-hidden md:min-h-0">
         {/* Mobile: stacked, still large */}
-        <div className="flex flex-col gap-3 py-2 md:hidden">
+        <div className="flex flex-col gap-3 overflow-y-auto py-2 md:hidden">
           {FOODIE_PILE.map((p, i) => (
             <motion.div
               key={i}
@@ -705,8 +706,8 @@ export function AboutScrollPage() {
             <button
               type="button"
               onClick={() => scrollToIndex(activeIndex - 1)}
-              className="pointer-events-auto flex items-center justify-center rounded-full p-2 opacity-90 transition-opacity hover:opacity-100"
-              style={{ color: CREAM }}
+              className="pointer-events-auto flex h-11 w-11 items-center justify-center rounded-full p-2 opacity-90 transition-opacity hover:opacity-100 sm:h-auto sm:w-auto"
+              style={{ color: CREAM, touchAction: "manipulation" }}
               aria-label="Previous section"
             >
               <motion.span
@@ -1223,15 +1224,22 @@ export function AboutScrollPage() {
               key={i}
               type="button"
               onClick={() => scrollToIndex(i)}
-              className="pointer-events-auto h-2.5 w-2.5 rounded-full border transition-colors"
+              className="pointer-events-auto flex h-11 w-11 items-center justify-center rounded-full border-0 bg-transparent p-0 transition-colors sm:h-10 sm:w-10"
               style={{
-                borderColor:
-                  activeIndex === i ? GOLD : "rgba(212, 160, 60, 0.2)",
-                backgroundColor: activeIndex === i ? GOLD : "transparent",
+                touchAction: "manipulation",
               }}
               aria-label={`Go to section ${i + 1}`}
               aria-current={activeIndex === i ? "true" : undefined}
-            />
+            >
+              <span
+                className="block h-2.5 w-2.5 rounded-full border transition-colors"
+                style={{
+                  borderColor:
+                    activeIndex === i ? GOLD : "rgba(212, 160, 60, 0.2)",
+                  backgroundColor: activeIndex === i ? GOLD : "transparent",
+                }}
+              />
+            </button>
           ))}
         </nav>
 
@@ -1240,8 +1248,8 @@ export function AboutScrollPage() {
             <button
               type="button"
               onClick={() => scrollToIndex(activeIndex + 1)}
-              className="pointer-events-auto flex flex-col items-center gap-1 opacity-95 transition-opacity hover:opacity-100"
-              style={{ color: CREAM }}
+              className="pointer-events-auto flex h-11 w-11 flex-col items-center justify-center gap-1 rounded-full opacity-95 transition-opacity hover:opacity-100 sm:h-auto sm:w-auto"
+              style={{ color: CREAM, touchAction: "manipulation" }}
               aria-label="Next section"
             >
               <motion.span
@@ -1255,8 +1263,8 @@ export function AboutScrollPage() {
             <button
               type="button"
               onClick={() => scrollToIndex(0)}
-              className="pointer-events-auto flex flex-col items-center gap-1 text-sm opacity-95 transition-opacity hover:opacity-100"
-              style={{ color: CREAM, fontFamily: "var(--font-crimson-pro), serif" }}
+              className="pointer-events-auto flex h-auto min-h-[44px] flex-col items-center gap-1 px-4 text-sm opacity-95 transition-opacity hover:opacity-100"
+              style={{ color: CREAM, fontFamily: "var(--font-crimson-pro), serif", touchAction: "manipulation" }}
               aria-label="Back to top"
             >
               <motion.span

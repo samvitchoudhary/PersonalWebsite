@@ -113,7 +113,7 @@ export function Modal({
               aria-modal="true"
               aria-labelledby="modal-title"
               aria-describedby="modal-subtitle"
-              className="pointer-events-auto relative flex max-h-[85vh] w-[92vw] max-w-[520px] flex-col overflow-hidden rounded-[20px] shadow-[0_24px_80px_rgba(0,0,0,0.5)]"
+              className="pointer-events-auto relative flex max-h-[85dvh] w-[92vw] max-w-[520px] flex-col overflow-hidden rounded-[20px] shadow-[0_24px_80px_rgba(0,0,0,0.5)]"
               style={{
                 backgroundColor: theme.bg,
                 color: theme.text,
@@ -141,8 +141,9 @@ export function Modal({
                 ref={closeBtnRef}
                 type="button"
                 onClick={onClose}
-                className="absolute right-3 top-3 z-10 flex h-9 w-9 cursor-pointer items-center justify-center rounded-full border border-white/10 bg-white/10 text-lg leading-none text-white/90 transition-colors hover:bg-white/20 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[rgba(212,160,60,0.7)]"
+                className="absolute right-3 top-3 z-10 flex h-11 w-11 cursor-pointer items-center justify-center rounded-full border border-white/10 bg-white/10 text-2xl leading-none text-white/90 transition-colors hover:bg-white/20 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[rgba(212,160,60,0.7)] sm:h-9 sm:w-9 sm:text-lg"
                 aria-label="Close"
+                style={{ touchAction: "manipulation" }}
               >
                 ×
               </button>

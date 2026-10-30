@@ -17,7 +17,8 @@ export default function ResumePage() {
           className="shrink-0 border-none bg-white"
           style={{
             width: "min(95vw, 800px)",
-            height: "90vh",
+            height: "min(90vh, 90dvh)",
+            maxHeight: "90dvh",
             borderRadius: 8,
             backgroundColor: "white",
           }}

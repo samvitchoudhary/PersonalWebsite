@@ -41,6 +41,7 @@ export function KitchenHotspotOverlay({
     screenX: number;
     screenY: number;
     text: string;
+    id: HotspotId;
   } | null>(null);
 
   const showTooltip = useCallback((h: HotspotConfig) => {
@@ -48,7 +49,7 @@ export function KitchenHotspotOverlay({
     if (!svg) return;
     const c = shapeCenter(h.shape);
     const { x, y } = svgPointToScreen(svg, c.x, c.y);
-    setTooltip({ screenX: x, screenY: y, text: h.tooltip });
+    setTooltip({ screenX: x, screenY: y, text: h.tooltip, id: h.id });
   }, []);
 
   const hideTooltip = useCallback(() => {
@@ -66,6 +67,23 @@ export function KitchenHotspotOverlay({
     [debug, onOpen],
   );
 
+  const handleTapOrClick = useCallback(
+    (h: HotspotConfig, e: React.MouseEvent | React.TouchEvent) => {
+      e.stopPropagation();
+      if (debug) {
+        console.log("[kitchen-hotspot]", h.id, h.shape);
+        return;
+      }
+      if (tooltip?.id === h.id) {
+        hideTooltip();
+        onOpen(h.id);
+      } else {
+        showTooltip(h);
+      }
+    },
+    [debug, onOpen, tooltip, showTooltip, hideTooltip],
+  );
+
   return (
     <>
       <svg
@@ -81,12 +99,18 @@ export function KitchenHotspotOverlay({
           const handlers = {
             "aria-label": h.tooltip,
             tabIndex: 0 as const,
-            onMouseEnter: () => showTooltip(h),
-            onMouseLeave: hideTooltip,
-            onClick: (e: React.MouseEvent) => {
-              e.stopPropagation();
-              handleActivate(h);
+            onMouseEnter: () => {
+              if (window.matchMedia && !window.matchMedia('(hover: none)').matches) {
+                showTooltip(h);
+              }
             },
+            onMouseLeave: () => {
+              if (window.matchMedia && !window.matchMedia('(hover: none)').matches) {
+                hideTooltip();
+              }
+            },
+            onClick: (e: React.MouseEvent) => handleTapOrClick(h, e),
+            onTouchEnd: (e: React.TouchEvent) => handleTapOrClick(h, e),
             onKeyDown: (e: React.KeyboardEvent) => {
               if (e.key === "Enter" || e.key === " ") {
                 e.preventDefault();

@@ -62,7 +62,7 @@ export default function ContactClient() {
             key={h.id}
             href={h.href}
             aria-label={h.label}
-            style={{ pointerEvents: "all" }}
+            style={{ pointerEvents: "all", touchAction: "manipulation" }}
             {...(h.external
               ? { target: "_blank" as const, rel: "noopener noreferrer" }
               : {})}

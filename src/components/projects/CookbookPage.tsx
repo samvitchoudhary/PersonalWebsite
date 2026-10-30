@@ -44,7 +44,7 @@ function BookPage({
       style={{ backgroundColor: PARCHMENT, color: INK }}
     >
       <div className="cookbook-page-texture pointer-events-none absolute inset-0" aria-hidden />
-      {children}
+      <div className="relative z-[1]">{children}</div>
     </div>
   );
 }
