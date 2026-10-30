@@ -4,8 +4,8 @@ An interactive portfolio website (samvitchoudhary.dev) featuring a watercolor ki
 
 ## Tech Stack
 
-- **Framework**: Next.js 16.2.2 (App Router)
-- **React**: 19.2.4
+- **Framework**: Next.js 16.4.3 (App Router)
+- **React**: 19.3.1
 - **Styling**: Tailwind CSS 4
 - **Animation**: Framer Motion 12.38.0
 - **Physics**: Matter.js 0.20.0 (for the fridge game)
