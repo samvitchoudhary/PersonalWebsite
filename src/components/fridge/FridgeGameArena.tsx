@@ -87,7 +87,9 @@ export function FridgeGameArena() {
   const [gameOver, setGameOver] = useState(false);
   const [gameKey, setGameKey] = useState(0);
 
-  gameOverRef.current = gameOver;
+  useEffect(() => {
+    gameOverRef.current = gameOver;
+  }, [gameOver]);
 
   const syncLayoutFromContainer = useCallback(() => {
     const el = containerRef.current;
@@ -123,6 +125,7 @@ export function FridgeGameArena() {
   }, [centerBowl]);
 
   useLayoutEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     centerBowl();
 
     const el = containerRef.current;

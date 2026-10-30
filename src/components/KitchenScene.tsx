@@ -198,7 +198,8 @@ export function KitchenScene() {
               className="rounded-full border border-[rgba(212,160,60,0.3)] bg-[rgba(20,15,10,0.85)] px-3 py-1.5 text-center text-[13px] italic leading-snug text-[#F5E6C8] backdrop-blur-md"
               style={{ fontFamily: "var(--font-crimson-pro), serif" }}
             >
-              hover over items in the kitchen to explore ✨
+              <span className="hidden sm:inline">hover over items in the kitchen to explore ✨</span>
+              <span className="sm:hidden">tap items in the kitchen to explore ✨</span>
             </motion.div>
           </motion.div>
         )}

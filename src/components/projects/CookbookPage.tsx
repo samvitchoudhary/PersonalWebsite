@@ -27,6 +27,7 @@ function BackButton() {
           backgroundColor: "rgba(26, 21, 16, 0.85)",
           borderColor: "rgba(212, 160, 60, 0.25)",
           color: CREAM,
+          touchAction: "manipulation",
         }}
       >
         <span aria-hidden className="text-lg leading-none">
@@ -66,7 +67,7 @@ function BookPage({
       style={{ backgroundColor: PARCHMENT, color: INK }}
     >
       <div className="cookbook-page-texture pointer-events-none absolute inset-0" aria-hidden />
-      {children}
+      <div className="relative z-[1]">{children}</div>
     </div>
   );
 }

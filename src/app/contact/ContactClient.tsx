@@ -54,7 +54,7 @@ export default function ContactClient() {
             key={h.id}
             href={h.href}
             aria-label={h.label}
-            style={{ pointerEvents: "all" }}
+            style={{ pointerEvents: "all", touchAction: "manipulation" }}
             {...(h.external
               ? { target: "_blank" as const, rel: "noopener noreferrer" }
               : {})}
@@ -80,6 +80,7 @@ export default function ContactClient() {
             backgroundColor: "rgba(26, 21, 16, 0.85)",
             borderColor: "rgba(212, 160, 60, 0.25)",
             color: CREAM,
+            touchAction: "manipulation",
           }}
         >
           <span aria-hidden className="text-lg leading-none">

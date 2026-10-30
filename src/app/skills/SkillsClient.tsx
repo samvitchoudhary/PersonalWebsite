@@ -30,6 +30,7 @@ export default function SkillsClient() {
             backgroundColor: "rgba(26, 21, 16, 0.85)",
             borderColor: "rgba(212, 160, 60, 0.25)",
             color: CREAM,
+            touchAction: "manipulation",
           }}
         >
           <span aria-hidden className="text-lg leading-none">
