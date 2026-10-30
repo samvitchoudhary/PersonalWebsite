@@ -87,6 +87,7 @@ export function FridgeGameArena() {
   const [gameOver, setGameOver] = useState(false);
   const [gameKey, setGameKey] = useState(0);
 
+  // eslint-disable-next-line react-hooks/refs -- Synchronously track gameOver state in ref for physics callbacks
   gameOverRef.current = gameOver;
 
   const syncLayoutFromContainer = useCallback(() => {
