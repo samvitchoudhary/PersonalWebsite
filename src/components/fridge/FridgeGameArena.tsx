@@ -54,6 +54,7 @@ function IngredientSprite({ item }: { item: FallingIngredient }) {
       aria-hidden
       draggable={false}
       decoding="async"
+      loading="lazy"
       width={item.size}
       height={item.size}
       className="pointer-events-none absolute select-none"

@@ -33,12 +33,22 @@ export default function ContactClient() {
   return (
     <div className="relative h-[100dvh] w-screen overflow-hidden bg-[#0A0806]">
       <KitchenBridgeRevealOverlay />
-      {/* eslint-disable-next-line @next/next/no-img-element */}
-      <img
-        src="/Contact.png"
-        alt=""
-        className="absolute left-0 top-0 z-0 block h-full w-full object-cover"
-      />
+      <picture>
+        <source
+          srcSet="/Contact.avif"
+          type="image/avif"
+        />
+        <source
+          srcSet="/Contact.webp"
+          type="image/webp"
+        />
+        <img
+          src="/Contact.png"
+          alt=""
+          className="absolute left-0 top-0 z-0 block h-full w-full object-cover"
+          loading="lazy"
+        />
+      </picture>
 
       <svg
         className="contact-hotspot-svg absolute left-0 top-0 z-[25] h-full w-full"

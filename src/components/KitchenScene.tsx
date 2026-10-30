@@ -146,21 +146,31 @@ export function KitchenScene() {
         transformOrigin={transformOrigin}
         durationSec={durationSec}
       >
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img
-          src="/PersonalWebsite.png"
-          alt=""
-          style={{
-            position: "absolute",
-            top: 0,
-            left: 0,
-            width: "100%",
-            height: "100%",
-            objectFit: "cover",
-            display: "block",
-            zIndex: 0,
-          }}
-        />
+        <picture>
+          <source
+            srcSet="/PersonalWebsite.avif"
+            type="image/avif"
+          />
+          <source
+            srcSet="/PersonalWebsite.webp"
+            type="image/webp"
+          />
+          <img
+            src="/PersonalWebsite.png"
+            alt=""
+            fetchPriority="high"
+            style={{
+              position: "absolute",
+              top: 0,
+              left: 0,
+              width: "100%",
+              height: "100%",
+              objectFit: "cover",
+              display: "block",
+              zIndex: 0,
+            }}
+          />
+        </picture>
         <LampGlow />
         <WindowFireflies />
         <DustMotes />

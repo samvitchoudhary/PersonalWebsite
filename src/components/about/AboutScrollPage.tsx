@@ -120,6 +120,7 @@ function FloatingLogoLink({
         src={src}
         alt={alt}
         className="h-full w-full object-contain drop-shadow-[0_4px_12px_rgba(0,0,0,0.45)]"
+        loading="lazy"
       />
     </motion.a>
   );
@@ -761,11 +762,22 @@ export function AboutScrollPage() {
                     boxShadow: "0 8px 32px rgba(0, 0, 0, 0.45)",
                   }}
                 >
-                  <img
-                    src="/aboutMeImages/Samvit.png"
-                    alt="Samvit Choudhary"
-                    className="h-full w-full object-cover"
-                  />
+                  <picture>
+                    <source
+                      srcSet="/aboutMeImages/Samvit.avif"
+                      type="image/avif"
+                    />
+                    <source
+                      srcSet="/aboutMeImages/Samvit.webp"
+                      type="image/webp"
+                    />
+                    <img
+                      src="/aboutMeImages/Samvit.png"
+                      alt="Samvit Choudhary"
+                      className="h-full w-full object-cover"
+                      fetchPriority="high"
+                    />
+                  </picture>
                 </div>
               </motion.div>
               <motion.h1
@@ -918,11 +930,22 @@ export function AboutScrollPage() {
                     variants={scalePhoto}
                   >
                     <div className="h-[min(42vh,320px)] w-[min(28vw,215px)] overflow-hidden rounded-xl shadow-[0_6px_24px_rgba(20,12,5,0.45)] ring-1 ring-[rgba(212,160,60,0.15)]">
-                      <img
-                        src="/aboutMeImages/AboutTime.jpg"
-                        alt="About Time movie poster"
-                        className="h-full w-full object-cover"
-                      />
+                      <picture>
+                        <source
+                          srcSet="/aboutMeImages/AboutTime.avif"
+                          type="image/avif"
+                        />
+                        <source
+                          srcSet="/aboutMeImages/AboutTime.webp"
+                          type="image/webp"
+                        />
+                        <img
+                          src="/aboutMeImages/AboutTime.jpg"
+                          alt="About Time movie poster"
+                          className="h-full w-full object-cover"
+                          loading="lazy"
+                        />
+                      </picture>
                     </div>
                   </motion.div>
                 </motion.div>
@@ -940,11 +963,22 @@ export function AboutScrollPage() {
                     variants={scalePhoto}
                   >
                     <div className="aspect-video w-full overflow-hidden rounded-xl shadow-[0_6px_24px_rgba(20,12,5,0.45)] ring-1 ring-[rgba(212,160,60,0.15)]">
-                      <img
-                        src="/aboutMeImages/StudioGhibli.webp"
-                        alt="Studio Ghibli"
-                        className="h-full w-full object-cover"
-                      />
+                      <picture>
+                        <source
+                          srcSet="/aboutMeImages/StudioGhibli.avif"
+                          type="image/avif"
+                        />
+                        <source
+                          srcSet="/aboutMeImages/StudioGhibli.webp"
+                          type="image/webp"
+                        />
+                        <img
+                          src="/aboutMeImages/StudioGhibli.webp"
+                          alt="Studio Ghibli"
+                          className="h-full w-full object-cover"
+                          loading="lazy"
+                        />
+                      </picture>
                     </div>
                   </motion.div>
                 </motion.div>
