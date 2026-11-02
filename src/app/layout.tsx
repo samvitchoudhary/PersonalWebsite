@@ -11,9 +11,36 @@ const crimsonPro = Crimson_Pro({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL("https://samvitchoudhary.dev"),
   title: "Samvit's Kitchen",
   description:
     "Interactive portfolio — explore a watercolor kitchen to learn about Samvit's work and story.",
+  alternates: {
+    canonical: "https://samvitchoudhary.dev",
+  },
+  openGraph: {
+    title: "Samvit's Kitchen",
+    description:
+      "Interactive portfolio — explore a watercolor kitchen to learn about Samvit's work and story.",
+    url: "https://samvitchoudhary.dev",
+    siteName: "Samvit's Kitchen",
+    type: "website",
+    images: [
+      {
+        url: "/PersonalWebsite.png",
+        width: 1536,
+        height: 1024,
+        alt: "Samvit's Kitchen - Interactive portfolio",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Samvit's Kitchen",
+    description:
+      "Interactive portfolio — explore a watercolor kitchen to learn about Samvit's work and story.",
+    images: ["/PersonalWebsite.png"],
+  },
 };
 
 export default function RootLayout({
