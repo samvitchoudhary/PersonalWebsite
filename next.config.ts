@@ -22,10 +22,14 @@ const nextConfig: NextConfig = {
               "connect-src 'self'",
               "frame-src 'self'",
               "object-src 'self'",
-              "frame-ancestors 'none'",
+              "frame-ancestors 'self'",
               "base-uri 'self'",
               "form-action 'self'",
             ].join("; "),
+          },
+          {
+            key: "X-Frame-Options",
+            value: "SAMEORIGIN",
           },
           {
             key: "X-Content-Type-Options",
