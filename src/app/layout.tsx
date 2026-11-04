@@ -27,9 +27,9 @@ export const metadata: Metadata = {
     type: "website",
     images: [
       {
-        url: "/PersonalWebsite.png",
-        width: 1536,
-        height: 1024,
+        url: "/PersonalWebsite-og.webp",
+        width: 1200,
+        height: 630,
         alt: "Samvit's Kitchen - Interactive portfolio",
       },
     ],
@@ -39,7 +39,7 @@ export const metadata: Metadata = {
     title: "Samvit's Kitchen",
     description:
       "Interactive portfolio — explore a watercolor kitchen to learn about Samvit's work and story.",
-    images: ["/PersonalWebsite.png"],
+    images: ["/PersonalWebsite-og.webp"],
   },
 };
 
