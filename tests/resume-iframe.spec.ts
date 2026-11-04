@@ -50,9 +50,6 @@ test.describe('Resume iframe rendering', () => {
       fullPage: true 
     });
 
-    // Wait for the iframe to be present
-    const iframe = page.frameLocator('iframe[title="Samvit Choudhary — Resume"]');
-    
     // Give the PDF time to load
     await page.waitForTimeout(3000);
 
